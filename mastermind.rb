@@ -26,5 +26,17 @@ def get_guesses
   p @user_guesses
 end
 
+def find_black_matches
+  @user_guesses.each_with_index do |color, i|
+    if color == @computer_solution[i]
+      @num_black_pegs += 1
+      @user_guesses[i] = nil
+    end
+  end
+  p @num_black_pegs
+  p @user_guesses
+end
+
 create_solution
 get_guesses
+find_black_matches
