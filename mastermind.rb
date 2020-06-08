@@ -20,8 +20,8 @@ class Game
       if !@@COLOR_INDEX.include?(color)
         return false
       end
-      true
     end
+    true
   end
 
   def get_guesses
@@ -29,9 +29,8 @@ class Game
       puts "Please enter your guesses"
       puts "Guess four colors from the following list, separated by commas:"
       puts "red, yellow, orange, green, blue, and purple"
-      @user_guesses = gets.chomp.split(/\s*,\s*/)
+      @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
     end
-    p @user_guesses
   end
   
   def find_black_matches(solution)
@@ -41,7 +40,6 @@ class Game
         @user_guesses[i] = nil
       end
     end
-    p @num_black_pegs
     p @user_guesses
   end
 
@@ -49,14 +47,15 @@ end
 
 class Solution
 
+  @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
+ 
   attr_reader :solution
 
   def initialize
-    @COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
     @solution = []
-    0.upto(3) {@solution.push(rand(6))}
+    0.upto(3) { @solution.push(rand(6)) }
     @solution.each_with_index do |num, i|
-      @solution[i] = @COLOR_INDEX[num]
+      @solution[i] = @@COLOR_INDEX[num]
     end
     p @solution
   end
