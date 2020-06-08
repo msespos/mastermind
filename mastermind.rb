@@ -1,30 +1,42 @@
-def Player
+class Player
 end
 
-def Game
+class Game
 
-  @COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
+  @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
 
-  @user_guesses = []
-  @num_black_pegs = 0
-  @num_white_pegs = 0
+  def initialize
+    @user_guesses = []
+    @num_black_pegs = 0
+    @num_white_pegs = 0
+  end
+
+  def length_correct?(user_guesses)
+    user_guesses.length == 4
+  end
+
+  def colors_correct?(user_guesses)
+    user_guesses.each do |color|
+      if !@@COLOR_INDEX.include?(color)
+        return false
+      end
+      true
+    end
+  end
 
   def get_guesses
-    puts "Enter your four guesses, separated by commas"
-    @user_guesses = gets.chomp.split(/\s*,\s*/)
-    @user_guesses.each do |color|
-      while !@COLOR_INDEX.include? color
-        puts "Please enter 4 colors from the following list:"
-        puts "red, yellow, orange, green, blue, and purple"
-        @user_guesses = gets.chomp.split(/\s*,\s*/)
-      end
+    until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
+      puts "Please enter your guesses"
+      puts "Guess four colors from the following list, separated by commas:"
+      puts "red, yellow, orange, green, blue, and purple"
+      @user_guesses = gets.chomp.split(/\s*,\s*/)
     end
     p @user_guesses
   end
   
-  def find_black_matches
+  def find_black_matches(solution)
     @user_guesses.each_with_index do |color, i|
-      if color == @computer_solution[i]
+      if color == solution[i]
         @num_black_pegs += 1
         @user_guesses[i] = nil
       end
@@ -35,16 +47,22 @@ def Game
 
 end
 
-def Sequence
+class Solution
 
-  @computer_solution = []
+  attr_reader :solution
 
   def initialize
-    0.upto(3) {@computer_solution.push(rand(6))}
-    @computer_solution.each_with_index do |num, i|
-      @computer_solution[i] = @COLOR_INDEX[num]
+    @COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
+    @solution = []
+    0.upto(3) {@solution.push(rand(6))}
+    @solution.each_with_index do |num, i|
+      @solution[i] = @COLOR_INDEX[num]
     end
-    p @computer_solution
+    p @solution
   end
   
 end
+
+game = Game.new
+game.get_guesses
+game.find_black_matches(Solution.new.solution)
