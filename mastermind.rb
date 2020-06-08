@@ -1,3 +1,12 @@
+def Player
+end
+
+def Game
+end
+
+def Sequence
+end
+
 @COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
 
 @computer_solution = []
