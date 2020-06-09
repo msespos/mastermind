@@ -1,16 +1,14 @@
 class Player
-end
-
-class Game
 
   @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
 
+  attr_reader :user_guesses
+
   def initialize
     @user_guesses = []
-    @num_black_pegs = 0
-    @num_white_pegs = 0
+    get_guesses
   end
-
+  
   # check that the user submits exactly four colors
   def length_correct?(user_guesses)
     user_guesses.length == 4
@@ -37,7 +35,19 @@ class Game
       @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
     end
   end
-  
+
+end
+
+class Game
+
+  @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
+
+  def initialize
+    @user_guesses = Player.new.user_guesses
+    @num_black_pegs = 0
+    @num_white_pegs = 0
+  end
+
   # identify the number of black peg matches and store it in @num_black_pegs
   # change those matches to nil in preparation for find_white_matches
   def find_black_matches(solution)
@@ -75,10 +85,15 @@ class Game
   end
 
   # call find_black_matches and find_white_matches, then report the results
-  def find_matches(solution)
+  def play(solution)
     translate_to_colors(solution)
+    p solution
     find_black_matches(solution)
     find_white_matches(@user_guesses, solution)
+    display_score
+  end
+
+  def display_score
     if @num_black_pegs == 4
       puts "4 black pegs. You win!"
     elsif @num_black_pegs == 1 && @num_white_pegs == 1
@@ -108,5 +123,4 @@ end
 
 game = Game.new
 solution = Solution.new.solution
-game.get_guesses
-game.find_matches(solution)
+game.play(solution)
