@@ -26,9 +26,11 @@ class Game
 
   def get_guesses
     until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
-      puts "Please enter your guesses."
-      puts "Guess four colors from the following list, separated by commas:"
-      puts "red, yellow, orange, green, blue, and purple"
+      puts <<~HEREDOC
+        Please enter your guesses.
+        Guess four colors from the following list, separated by commas:
+        red, yellow, orange, green, blue, and purple
+      HEREDOC
       @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
     end
   end
