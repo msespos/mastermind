@@ -45,8 +45,10 @@ class Game
   end
 
   def find_white_matches(guesses, solution)
-    guesses.compact.each_with_index do |color, i|
-      solution.compact.each_with_index do |solution_color, j|
+    guesses.compact!
+    solution.compact!
+    guesses.each_with_index do |color, i|
+      solution.each_with_index do |solution_color, j|
         if color == solution_color
           guesses[i] = nil
           solution[j] = nil
@@ -59,8 +61,17 @@ class Game
   def find_matches(solution)
     black_matches_nil_solution = find_black_matches(solution)
     find_white_matches(@user_guesses, black_matches_nil_solution)
-    p @num_black_pegs
-    p @num_white_pegs
+    if @num_black_pegs == 4
+      puts "4 black pegs. You win!"
+    elsif @num_black_pegs == 1 && @num_white_pegs == 1
+      puts "1 black peg and 1 white peg. Try again!"
+    elsif @num_black_pegs == 1 && @num_white_pegs != 1
+      puts "1 black peg and #{@num_white_pegs} white pegs. Try again!"
+    elsif @num_black_pegs != 1 && @num_white_pegs == 1
+      puts "#{@num_black_pegs} black pegs and 1 white peg. Try again!"
+    else
+      puts "#{@num_black_pegs} black pegs and #{@num_white_pegs} white pegs. Try again!"
+    end
   end
 
 end
