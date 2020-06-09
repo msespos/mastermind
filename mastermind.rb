@@ -16,7 +16,7 @@ class Game
     user_guesses.length == 4
   end
 
-  # check that the user submits all valid colors
+  # check that the user submits only valid colors
   def colors_correct?(user_guesses)
     user_guesses.each do |color|
       if !@@COLOR_INDEX.include?(color)
@@ -48,7 +48,6 @@ class Game
         @num_black_pegs += 1
       end
     end
-    solution
   end
 
   # get rid of all nil elements in the guesses and solution array
@@ -68,9 +67,17 @@ class Game
     end
   end
   
+  # transform an array of numbers to the corresponding COLOR_INDEX colors
+  def translate_to_colors(solution)
+    solution.each_with_index do |num, i|
+      solution[i] = @@COLOR_INDEX[num]
+    end
+  end
+
   # call find_black_matches and find_white_matches, then report the results
   def find_matches(solution)
-    solution = find_black_matches(solution)
+    translate_to_colors(solution)
+    find_black_matches(solution)
     find_white_matches(@user_guesses, solution)
     if @num_black_pegs == 4
       puts "4 black pegs. You win!"
@@ -89,18 +96,12 @@ end
 
 class Solution
 
-  @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
- 
   attr_reader :solution
 
   # create a randomized solution array
   def initialize
     @solution = []
     0.upto(3) { @solution.push(rand(6)) }
-    @solution.each_with_index do |num, i|
-      @solution[i] = @@COLOR_INDEX[num]
-    end
-    p @solution
   end
   
 end
