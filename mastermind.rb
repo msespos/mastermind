@@ -11,10 +11,12 @@ class Game
     @num_white_pegs = 0
   end
 
+  # check that the user submits exactly four colors
   def length_correct?(user_guesses)
     user_guesses.length == 4
   end
 
+  # check that the user submits all valid colors
   def colors_correct?(user_guesses)
     user_guesses.each do |color|
       if !@@COLOR_INDEX.include?(color)
@@ -24,6 +26,7 @@ class Game
     true
   end
 
+  # request and obtain the user's guesses, reprompting until they are valid
   def get_guesses
     until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
       puts <<~HEREDOC
@@ -35,17 +38,22 @@ class Game
     end
   end
   
+  # identify the number of black peg matches and store it in @num_black_pegs
+  # change those matches to nil in preparation for find_white_matches
   def find_black_matches(solution)
     @user_guesses.each_with_index do |color, i|
       if color == solution[i]
-        @num_black_pegs += 1
         @user_guesses[i] = nil
         solution[i] = nil
+        @num_black_pegs += 1
       end
     end
     solution
   end
 
+  # get rid of all nil elements in the guesses and solution array
+  # check for the number of white peg matches and store it in @num_white_pegs
+  # change all matches to nil to avoid duplications
   def find_white_matches(guesses, solution)
     guesses.compact!
     solution.compact!
@@ -60,9 +68,10 @@ class Game
     end
   end
   
+  # call find_black_matches and find_white_matches, then report the results
   def find_matches(solution)
-    black_matches_nil_solution = find_black_matches(solution)
-    find_white_matches(@user_guesses, black_matches_nil_solution)
+    solution = find_black_matches(solution)
+    find_white_matches(@user_guesses, solution)
     if @num_black_pegs == 4
       puts "4 black pegs. You win!"
     elsif @num_black_pegs == 1 && @num_white_pegs == 1
@@ -84,6 +93,7 @@ class Solution
  
   attr_reader :solution
 
+  # create a randomized solution array
   def initialize
     @solution = []
     0.upto(3) { @solution.push(rand(6)) }
