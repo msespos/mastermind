@@ -26,7 +26,7 @@ class Game
 
   def get_guesses
     until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
-      puts "Please enter your guesses"
+      puts "Please enter your guesses."
       puts "Guess four colors from the following list, separated by commas:"
       puts "red, yellow, orange, green, blue, and purple"
       @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
@@ -38,9 +38,29 @@ class Game
       if color == solution[i]
         @num_black_pegs += 1
         @user_guesses[i] = nil
+        solution[i] = nil
       end
     end
-    p @user_guesses
+    solution
+  end
+
+  def find_white_matches(guesses, solution)
+    guesses.compact.each_with_index do |color, i|
+      solution.compact.each_with_index do |solution_color, j|
+        if color == solution_color
+          guesses[i] = nil
+          solution[j] = nil
+          @num_white_pegs += 1
+        end
+      end
+    end
+  end
+  
+  def find_matches(solution)
+    black_matches_nil_solution = find_black_matches(solution)
+    find_white_matches(@user_guesses, black_matches_nil_solution)
+    p @num_black_pegs
+    p @num_white_pegs
   end
 
 end
@@ -63,5 +83,6 @@ class Solution
 end
 
 game = Game.new
+solution = Solution.new.solution
 game.get_guesses
-game.find_black_matches(Solution.new.solution)
+game.find_matches(solution)
