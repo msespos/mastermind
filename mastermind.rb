@@ -45,20 +45,18 @@ class Game
   def initialize
     @user_guesses = Player.new.user_guesses
     @num_exact_matches = 0
-    @num_white_pegs = 0
+    @num_color_only_matches = 0
   end
 
   # identify the number of exact matches and store it in @num_exact_matches
-  # change those matches to nil in preparation for find_white_matches
   def find_exact_matches(guesses, solution)
     exact_matches = guesses.zip(solution).map { |x, y| x == y }
     @num_exact_matches = exact_matches.count(true)
   end
 
-  # get rid of all nil elements in the guesses and solution array
-  # check for the number of white peg matches and store it in @num_white_pegs
+  # check for the number of color-only matches and store it in @num_color_only_matches
   # change all matches to nil to avoid duplications
-  def find_white_matches(guesses, solution)
+  def find_color_only_matches(guesses, solution)
     guesses.compact!
     solution.compact!
     guesses.each_with_index do |color, i|
@@ -66,7 +64,7 @@ class Game
         if color == solution_color
           guesses[i] = nil
           solution[j] = nil
-          @num_white_pegs += 1
+          @num_color_only_matches += 1
         end
       end
     end
@@ -79,26 +77,26 @@ class Game
     end
   end
 
-  # call find_black_matches and find_white_matches, then report the results
+  # call find_exact_matches and find_color_only_matches, then report the results
   def play(solution)
     translate_to_colors(solution)
     p solution
     find_exact_matches(@user_guesses, solution)
-    find_white_matches(@user_guesses, solution)
+    find_color_only_matches(@user_guesses, solution)
     display_score
   end
 
   def display_score
     if @num_exact_matches == 4
-      puts "4 black pegs. You win!"
-    elsif @num_exact_matches == 1 && @num_white_pegs == 1
-      puts "1 black peg and 1 white peg. Try again!"
-    elsif @num_exact_matches == 1 && @num_white_pegs != 1
-      puts "1 black peg and #{@num_white_pegs} white pegs. Try again!"
-    elsif @num_exact_matches != 1 && @num_white_pegs == 1
-      puts "#{@num_exact_matches} black pegs and 1 white peg. Try again!"
+      puts "4 exact matches. You win!"
+    elsif @num_exact_matches == 1 && @num_color_only_matches == 1
+      puts "1 exact match and 1 color-only match. Try again!"
+    elsif @num_exact_matches == 1 && @num_color_only_matches != 1
+      puts "1 exact match and #{@num_color_only_matches} color-only matches. Try again!"
+    elsif @num_exact_matches != 1 && @num_color_only_matches == 1
+      puts "#{@num_exact_matches} exact matches and 1 color-only match. Try again!"
     else
-      puts "#{@num_exact_matches} black pegs and #{@num_white_pegs} white pegs. Try again!"
+      puts "#{@num_exact_matches} exact matches and #{@num_color_only_matches} color-only matches. Try again!"
     end
   end
 
