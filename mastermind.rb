@@ -54,20 +54,8 @@ class Game
     @num_exact_matches = exact_matches.count(true)
   end
 
-  # check for the number of color-only matches and store it in @num_color_only_matches
-  # change all matches to nil to avoid duplications
+  # identify the number of color-only matches and store it in @num_color_only_matches
   def find_color_only_matches(guesses, solution)
-    guesses.compact!
-    solution.compact!
-    guesses.each_with_index do |color, i|
-      solution.each_with_index do |solution_color, j|
-        if color == solution_color
-          guesses[i] = nil
-          solution[j] = nil
-          @num_color_only_matches += 1
-        end
-      end
-    end
   end
   
   # transform an array of numbers to the corresponding COLOR_INDEX colors
@@ -75,15 +63,6 @@ class Game
     solution.each_with_index do |num, i|
       solution[i] = @@COLOR_INDEX[num]
     end
-  end
-
-  # call find_exact_matches and find_color_only_matches, then report the results
-  def play(solution)
-    translate_to_colors(solution)
-    p solution
-    find_exact_matches(@user_guesses, solution)
-    find_color_only_matches(@user_guesses, solution)
-    display_score
   end
 
   def display_score
@@ -98,6 +77,15 @@ class Game
     else
       puts "#{@num_exact_matches} exact matches and #{@num_color_only_matches} color-only matches. Try again!"
     end
+  end
+
+  # play a round of the game
+  def play(solution)
+    translate_to_colors(solution)
+    p solution
+    find_exact_matches(@user_guesses, solution)
+    find_color_only_matches(@user_guesses, solution)
+    display_score
   end
 
 end
