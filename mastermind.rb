@@ -44,20 +44,15 @@ class Game
 
   def initialize
     @user_guesses = Player.new.user_guesses
-    @num_black_pegs = 0
+    @num_exact_matches = 0
     @num_white_pegs = 0
   end
 
-  # identify the number of black peg matches and store it in @num_black_pegs
+  # identify the number of exact matches and store it in @num_exact_matches
   # change those matches to nil in preparation for find_white_matches
-  def find_black_matches(solution)
-    @user_guesses.each_with_index do |color, i|
-      if color == solution[i]
-        @user_guesses[i] = nil
-        solution[i] = nil
-        @num_black_pegs += 1
-      end
-    end
+  def find_exact_matches(guesses, solution)
+    exact_matches = guesses.zip(solution).map { |x, y| x == y }
+    @num_exact_matches = exact_matches.count(true)
   end
 
   # get rid of all nil elements in the guesses and solution array
@@ -88,22 +83,22 @@ class Game
   def play(solution)
     translate_to_colors(solution)
     p solution
-    find_black_matches(solution)
+    find_exact_matches(@user_guesses, solution)
     find_white_matches(@user_guesses, solution)
     display_score
   end
 
   def display_score
-    if @num_black_pegs == 4
+    if @num_exact_matches == 4
       puts "4 black pegs. You win!"
-    elsif @num_black_pegs == 1 && @num_white_pegs == 1
+    elsif @num_exact_matches == 1 && @num_white_pegs == 1
       puts "1 black peg and 1 white peg. Try again!"
-    elsif @num_black_pegs == 1 && @num_white_pegs != 1
+    elsif @num_exact_matches == 1 && @num_white_pegs != 1
       puts "1 black peg and #{@num_white_pegs} white pegs. Try again!"
-    elsif @num_black_pegs != 1 && @num_white_pegs == 1
-      puts "#{@num_black_pegs} black pegs and 1 white peg. Try again!"
+    elsif @num_exact_matches != 1 && @num_white_pegs == 1
+      puts "#{@num_exact_matches} black pegs and 1 white peg. Try again!"
     else
-      puts "#{@num_black_pegs} black pegs and #{@num_white_pegs} white pegs. Try again!"
+      puts "#{@num_exact_matches} black pegs and #{@num_white_pegs} white pegs. Try again!"
     end
   end
 
