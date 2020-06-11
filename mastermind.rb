@@ -51,6 +51,9 @@ class Game
 
   # identify the number of color-only matches and store it in @num_color_only_matches
   def find_color_only_matches(guesses, solution)
+    guesses_without_exact_matches = guesses.zip(solution).delete_if { |x, y| x == y }
+    color_only_matches = guesses_without_exact_matches.transpose[0] & guesses_without_exact_matches.transpose[1]
+    @num_color_only_matches = color_only_matches.length
   end
   
   # transform an array of numbers to the corresponding COLOR_INDEX colors
