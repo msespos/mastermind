@@ -35,10 +35,9 @@ end
 
 class Game
 
-  @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
+  attr_reader :num_exact_matches
 
   def initialize
-    @user_guesses = Player.new.user_guesses
     @num_exact_matches = 0
     @num_color_only_matches = 0
   end
@@ -53,16 +52,12 @@ class Game
   def find_color_only_matches(guesses, solution)
     guesses_without_exact_matches = guesses.zip(solution).delete_if { |x, y| x == y }
     color_only_matches = guesses_without_exact_matches.transpose[0] & guesses_without_exact_matches.transpose[1]
-    @num_color_only_matches = color_only_matches.length
-  end
-  
-  # transform an array of numbers to the corresponding COLOR_INDEX colors
-  def translate_to_colors(solution)
-    solution.each_with_index do |num, i|
-      solution[i] = @@COLOR_INDEX[num]
+    p color_only_matches
+    unless color_only_matches == false
+      @num_color_only_matches = color_only_matches.length
     end
   end
-
+  
   def display_score
     if @num_exact_matches == 4
       puts "4 exact matches. You win!"
@@ -79,8 +74,8 @@ class Game
 
   # play a round of the game
   def play(solution)
-    translate_to_colors(solution)
     p solution
+    @user_guesses = Player.new.user_guesses
     find_exact_matches(@user_guesses, solution)
     find_color_only_matches(@user_guesses, solution)
     display_score
@@ -90,16 +85,28 @@ end
 
 class Solution
 
+  @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
+
   attr_reader :solution
 
   # create a randomized solution array
   def initialize
     @solution = []
     0.upto(3) { @solution.push(rand(6)) }
+    translate_to_colors(@solution)
   end
   
+  # transform an array of numbers to the corresponding COLOR_INDEX colors
+  def translate_to_colors(solution)
+    solution.each_with_index do |num, i|
+      solution[i] = @@COLOR_INDEX[num]
+    end
+  end
+
 end
 
 game = Game.new
 solution = Solution.new.solution
-game.play(solution)
+while game.num_exact_matches != 4
+  game.play(solution)
+end
