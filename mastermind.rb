@@ -23,9 +23,10 @@ class Player
   def get_guesses
     until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
       puts <<~HEREDOC
-        Please enter your guesses.
+        Please enter your four guesses.
         Guess four colors from the following list, separated by commas:
         red, yellow, orange, green, blue, and purple
+        
       HEREDOC
       @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
     end
@@ -59,15 +60,15 @@ class Round
   
   def display_score
     if @num_exact_matches == 4
-      puts "4 exact matches. You win!"
+      puts "4 exact matches. You win!\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches == 1
-      puts "1 exact match and 1 color-only match. Try again!"
+      puts "1 exact match and 1 color-only match. Try again!\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches != 1
-      puts "1 exact match and #{@num_color_only_matches} color-only matches. Try again!"
+      puts "1 exact match and #{@num_color_only_matches} color-only matches. Try again!\n\n"
     elsif @num_exact_matches != 1 && @num_color_only_matches == 1
-      puts "#{@num_exact_matches} exact matches and 1 color-only match. Try again!"
+      puts "#{@num_exact_matches} exact matches and 1 color-only match. Try again!\n\n"
     else
-      puts "#{@num_exact_matches} exact matches and #{@num_color_only_matches} color-only matches. Try again!"
+      puts "#{@num_exact_matches} exact matches and #{@num_color_only_matches} color-only matches. Try again!\n\n"
     end
   end
 
@@ -118,7 +119,7 @@ class Game
       @round.play(@solution)
       @num_rounds += 1
       if @num_rounds == 12
-        puts "You lose!"
+        puts "12 rounds are up. You lose!"
       end
     end
   end
