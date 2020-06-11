@@ -53,22 +53,20 @@ class Round
   def find_color_only_matches(guesses, solution)
     guesses_without_exact_matches = guesses.zip(solution).delete_if { |x, y| x == y }
     color_only_matches = guesses_without_exact_matches.transpose[0] & guesses_without_exact_matches.transpose[1]
-    unless color_only_matches == false
-      @num_color_only_matches = color_only_matches.length
-    end
+    @num_color_only_matches = color_only_matches.length unless color_only_matches == false
   end
   
   def display_score
     if @num_exact_matches == 4
-      puts "4 exact matches. You win!\n\n"
+      puts "\n4 exact matches. You win!\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches == 1
-      puts "1 exact match and 1 color-only match. Try again!\n\n"
+      puts "\n1 exact match and 1 color-only match. Try again!\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches != 1
-      puts "1 exact match and #{@num_color_only_matches} color-only matches. Try again!\n\n"
+      puts "\n1 exact match and #{@num_color_only_matches} color-only matches. Try again!\n\n"
     elsif @num_exact_matches != 1 && @num_color_only_matches == 1
-      puts "#{@num_exact_matches} exact matches and 1 color-only match. Try again!\n\n"
+      puts "\n#{@num_exact_matches} exact matches and 1 color-only match. Try again!\n\n"
     else
-      puts "#{@num_exact_matches} exact matches and #{@num_color_only_matches} color-only matches. Try again!\n\n"
+      puts "\n#{@num_exact_matches} exact matches and #{@num_color_only_matches} color-only matches. Try again!\n\n"
     end
   end
 
@@ -113,15 +111,14 @@ class Game
     @solution = Solution.new.solution
   end
 
+  # play a full 12-round game
   def play
     while @round.num_exact_matches != 4 && @num_rounds < 12
       @num_rounds == 11 ? (puts "Last round!") : (puts "#{12 - @num_rounds} rounds left!")
       puts "Round #{@num_rounds + 1}:"
       @round.play(@solution)
       @num_rounds += 1
-      if @num_rounds == 12
-        puts "12 rounds are up. You lose!"
-      end
+      puts "12 rounds are up. You lose!" if @num_rounds == 12
     end
   end
 
