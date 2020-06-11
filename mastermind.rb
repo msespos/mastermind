@@ -115,15 +115,12 @@ class Game
 
   def play
     while @round.num_exact_matches != 4 && @num_rounds < 12
+      @num_rounds == 11 ? (puts "Last round!") : (puts "#{12 - @num_rounds} rounds left!")
       puts "Round #{@num_rounds + 1}:"
       @round.play(@solution)
       @num_rounds += 1
-      if @num_rounds == 11
-        puts "Last round!"
-      elsif @num_rounds == 12
+      if @num_rounds == 12
         puts "12 rounds are up. You lose!"
-      else
-        puts "#{12 - @num_rounds} rounds left!"
       end
     end
   end
