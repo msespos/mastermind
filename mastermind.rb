@@ -36,11 +36,12 @@ end
 
 class Round
 
-  attr_reader :num_exact_matches
+  attr_reader :num_exact_matches, :did_user_win
 
   def initialize
     @num_exact_matches = 0
     @num_color_only_matches = 0
+    @did_user_win = false
   end
 
   # identify the number of exact matches and store it in @num_exact_matches
@@ -58,15 +59,16 @@ class Round
   
   def display_score
     if @num_exact_matches == 4
-      puts "\n4 exact matches. You win!\n\n"
+      @did_user_win = true
+      puts "\n4 exact matches.\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches == 1
-      puts "\n1 exact match and 1 color-only match. Try again!\n\n"
+      puts "\n1 exact match and 1 color-only match.\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches != 1
-      puts "\n1 exact match and #{@num_color_only_matches} color-only matches. Try again!\n\n"
+      puts "\n1 exact match and #{@num_color_only_matches} color-only matches.\n\n"
     elsif @num_exact_matches != 1 && @num_color_only_matches == 1
-      puts "\n#{@num_exact_matches} exact matches and 1 color-only match. Try again!\n\n"
+      puts "\n#{@num_exact_matches} exact matches and 1 color-only match.\n\n"
     else
-      puts "\n#{@num_exact_matches} exact matches and #{@num_color_only_matches} color-only matches. Try again!\n\n"
+      puts "\n#{@num_exact_matches} exact matches and #{@num_color_only_matches} color-only matches.\n\n"
     end
   end
 
@@ -119,6 +121,7 @@ class Game
       @round.play(@solution)
       @num_rounds += 1
       puts "12 rounds are up. You lose!" if @num_rounds == 12
+      @round.did_user_win == true ? (puts "You win!") : (puts "Try again!")
     end
   end
 
