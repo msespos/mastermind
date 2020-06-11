@@ -33,7 +33,7 @@ class Player
 
 end
 
-class Game
+class Round
 
   attr_reader :num_exact_matches
 
@@ -71,7 +71,7 @@ class Game
     end
   end
 
-  # play a round of the game
+  # play a round
   def play(solution)
     p solution
     @user_guesses = Player.new.user_guesses
@@ -104,13 +104,26 @@ class Solution
 
 end
 
-game = Game.new
-num_rounds = 0
-solution = Solution.new.solution
-while game.num_exact_matches != 4 && num_rounds < 12
-  game.play(solution)
-  num_rounds += 1
-  if num_rounds == 12
-    puts "You lose!"
+class Game
+
+  def initialize
+    @round = Round.new
+    @num_rounds = 0
+    @solution = Solution.new.solution
   end
+
+  def play
+    while @round.num_exact_matches != 4 && @num_rounds < 12
+      puts "Round #{@num_rounds + 1}:"
+      @round.play(@solution)
+      @num_rounds += 1
+      if @num_rounds == 12
+        puts "You lose!"
+      end
+    end
+  end
+
 end
+
+game = Game.new
+game.play
