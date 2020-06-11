@@ -52,7 +52,6 @@ class Game
   def find_color_only_matches(guesses, solution)
     guesses_without_exact_matches = guesses.zip(solution).delete_if { |x, y| x == y }
     color_only_matches = guesses_without_exact_matches.transpose[0] & guesses_without_exact_matches.transpose[1]
-    p color_only_matches
     unless color_only_matches == false
       @num_color_only_matches = color_only_matches.length
     end
@@ -106,7 +105,12 @@ class Solution
 end
 
 game = Game.new
+num_rounds = 0
 solution = Solution.new.solution
-while game.num_exact_matches != 4
+while game.num_exact_matches != 4 && num_rounds < 12
   game.play(solution)
+  num_rounds += 1
+  if num_rounds == 12
+    puts "You lose!"
+  end
 end
