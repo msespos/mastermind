@@ -26,7 +26,7 @@ class Player
         Please enter your four guesses.
         Guess four colors from the following list, separated by commas:
         red, yellow, orange, green, blue, and purple
-        
+
       HEREDOC
       @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
     end
@@ -118,8 +118,12 @@ class Game
       puts "Round #{@num_rounds + 1}:"
       @round.play(@solution)
       @num_rounds += 1
-      if @num_rounds == 12
+      if @num_rounds == 11
+        puts "Last round!"
+      elsif @num_rounds == 12
         puts "12 rounds are up. You lose!"
+      else
+        puts "#{12 - @num_rounds} rounds left!"
       end
     end
   end
