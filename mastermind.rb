@@ -16,12 +16,7 @@ class Player
 
   # check that the user submits only valid colors
   def colors_correct?(user_guesses)
-    user_guesses.each do |color|
-      if !@@COLOR_INDEX.include?(color)
-        return false
-      end
-    end
-    true
+    user_guesses.all? { |color| @@COLOR_INDEX.include?(color) }
   end
 
   # request and obtain the user's guesses, reprompting until they are valid
