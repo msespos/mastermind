@@ -23,15 +23,16 @@ class Player
 
   # request and obtain the user's guesses, reprompting until they are valid
   def get_guesses
-    until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
-      puts <<~HEREDOC
-        Please enter your four guesses.
+    puts <<~HEREDOC
+        #{" ".on_light_red + " " + " ".on_light_yellow + " " + " ".on_light_green +
+        " " + " ".on_light_blue + " " + " ".on_light_cyan + " " + " ".on_light_magenta}
         Guess four colors from the following list, separated by commas:
         #{"red".light_red}, #{"yellow".light_yellow}, #{"green".light_green},\
          #{"blue".light_blue}, #{"cyan".light_cyan}, and #{"magenta".light_magenta}
-        #{" ".on_light_red + " ".on_light_yellow + " ".on_light_green +
-          " ".on_light_blue + " ".on_light_cyan + " ".on_light_magenta}
+              
       HEREDOC
+    until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
+      puts "Please enter your four guesses."
       @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
     end
   end
@@ -120,12 +121,12 @@ class Game
   # play a full 12-round game
   def play
     while @round.num_exact_matches != 4 && @num_rounds < 12
-      @num_rounds == 11 ? (puts "Last round!") : (puts "#{12 - @num_rounds} rounds left!")
-      puts "Round #{@num_rounds + 1}:"
+      @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
+      puts "Round #{@num_rounds + 1}:\n\n"
       @round.play(@solution)
       @num_rounds += 1
-      puts "12 rounds are up. You lose!" if @num_rounds == 12
-      @round.did_user_win == true ? (puts "You win!") : (puts "Try again!")
+      puts "12 rounds are up. You lose!\n\n" if @num_rounds == 12
+      @round.did_user_win == true ? (puts "You win!\n\n") : (puts "Try again!\n\n")
     end
   end
 
