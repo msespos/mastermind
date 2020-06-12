@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Player
 
   @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
@@ -25,8 +27,10 @@ class Player
       puts <<~HEREDOC
         Please enter your four guesses.
         Guess four colors from the following list, separated by commas:
-        red, yellow, orange, green, blue, and purple
-
+        #{"red".light_red}, #{"yellow".light_yellow}, #{"green".light_green},\
+         #{"blue".light_blue}, #{"cyan".light_cyan}, and #{"magenta".light_magenta}
+        #{" ".on_light_red + " ".on_light_yellow + " ".on_light_green +
+          " ".on_light_blue + " ".on_light_cyan + " ".on_light_magenta}
       HEREDOC
       @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
     end
