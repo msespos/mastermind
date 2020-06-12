@@ -2,7 +2,7 @@ require 'colorize'
 
 class Player
 
-  @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
+  @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
 
   attr_reader :user_guesses
 
@@ -29,6 +29,8 @@ class Player
         Guess four colors from the following list, separated by commas:
         #{"red".light_red}, #{"yellow".light_yellow}, #{"green".light_green}, \
         #{"cyan".light_cyan}, #{"blue".light_blue}, and #{"magenta".light_magenta}
+        Use the first letter of each color (in lower case) for your guess
+        e.g. r, y, g, c
               
       HEREDOC
     until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
@@ -100,7 +102,7 @@ end
 
 class Solution
 
-  @@COLOR_INDEX = ["red", "orange", "yellow", "green", "blue", "purple"]
+  @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
 
   attr_reader :solution
 
@@ -113,9 +115,7 @@ class Solution
   
   # transform an array of numbers to the corresponding COLOR_INDEX colors
   def translate_to_colors(solution)
-    solution.each_with_index do |num, i|
-      solution[i] = @@COLOR_INDEX[num]
-    end
+    solution.each_with_index { |num, i| solution[i] = @@COLOR_INDEX[num] }
   end
 
 end
