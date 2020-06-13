@@ -26,16 +26,16 @@ class Player
       #  #{" ".on_light_red + " " + " ".on_light_yellow + " " + " ".on_light_green +
       #  " " + " ".on_light_cyan + " " + " ".on_light_blue + " " + " ".on_light_magenta}
     puts <<~HEREDOC
-        Guess four colors from the following list, separated by commas:
+        Guess four colors from the following list
         #{"red".light_red}, #{"yellow".light_yellow}, #{"green".light_green}, \
         #{"cyan".light_cyan}, #{"blue".light_blue}, and #{"magenta".light_magenta}
         Use the first letter of each color (in lower case) for your guess
-        e.g. r,y,g,c
+        e.g. rygc
               
       HEREDOC
     until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
       puts "Please enter your four guesses."
-      @user_guesses = gets.chomp.downcase.split(/\s*,\s*/)
+      @user_guesses = gets.chomp.downcase.split("")
     end
   end
 
@@ -85,28 +85,24 @@ class Round
   end
 
   def display_score
+    display_guesses(@user_guesses)
     if @num_exact_matches == 4
       @did_user_win = true
-      display_guesses(@user_guesses)
       puts (" ".on_black + " ") * 4 + "\n\n"
       puts "4 exact matches.\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches == 1
-      display_guesses(@user_guesses)
       puts " ".on_black + " " + " ".on_white + "\n\n"
       puts "1 exact match and 1 color-only match.\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches != 1
-      display_guesses(@user_guesses)
       puts " ".on_black + " " + (" ".on_white + " ") *
           @num_color_only_matches + "\n\n"
       puts "1 exact match and #{@num_color_only_matches} "\
           "color-only matches.\n\n"
     elsif @num_exact_matches != 1 && @num_color_only_matches == 1
-      display_guesses(@user_guesses)
       puts (" ".on_black + " ") * @num_exact_matches +
           " ".on_white + "\n\n"
       puts "#{@num_exact_matches} exact matches and 1 color-only match.\n\n"
     else
-      display_guesses(@user_guesses)
       puts (" ".on_black + " ") * @num_exact_matches + 
           (" ".on_white + " ") * @num_color_only_matches + "\n\n"
       puts "#{@num_exact_matches} exact matches and "\
