@@ -163,5 +163,47 @@ class Game
 
 end
 
-game = Game.new
-game.play
+class Intro
+
+  def initialize
+    @user_selection = 0
+  end
+
+  def display_intro
+    puts <<~HEREDOC
+
+      Welcome to Mastermind!
+      Would you like to be the guessor or the creator of the secret code?
+      Enter 1 to be the guesser
+      Enter 2 to be the creator
+
+    HEREDOC
+  end
+
+  def get_user_selection
+    until @user_selection == "1" || @user_selection == "2"
+      puts "Please enter 1 or 2"
+      @user_selection = gets.chomp
+      puts "\n"
+    end
+  end
+
+  def begin_game
+    if @user_selection == "1"
+      game = Game.new
+      game.play
+    elsif @user_selection == "2"
+      puts "(will go to player-creator game at this point)"
+    end
+  end
+
+  def start
+    display_intro
+    get_user_selection
+    begin_game
+  end
+
+end
+
+intro = Intro.new
+intro.start
