@@ -1,6 +1,6 @@
 require 'colorize'
 
-class Player
+class UserGuesserPlayer
 
   @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
 
@@ -41,7 +41,7 @@ class Player
 
 end
 
-class Round
+class UserGuesserRound
 
   attr_reader :num_exact_matches, :did_user_win
 
@@ -113,7 +113,7 @@ class Round
   # play a round
   def play(solution)
     p solution
-    @user_guesses = Player.new.user_guesses
+    @user_guesses = UserGuesserPlayer.new.user_guesses
     find_exact_matches(@user_guesses, solution)
     find_color_only_matches(@user_guesses, solution)
     display_score
@@ -121,7 +121,7 @@ class Round
 
 end
 
-class Solution
+class UserGuesserSolution
 
   @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
 
@@ -141,12 +141,12 @@ class Solution
 
 end
 
-class Game
+class UserGuesserGame
 
   def initialize
-    @round = Round.new
+    @round = UserGuesserRound.new
     @num_rounds = 0
-    @solution = Solution.new.solution
+    @solution = UserGuesserSolution.new.solution
   end
 
   # play a full 12-round game
@@ -190,7 +190,7 @@ class Intro
 
   def begin_game
     if @user_selection == "1"
-      game = Game.new
+      game = UserGuesserGame.new
       game.play
     elsif @user_selection == "2"
       puts "(will go to player-creator game at this point)"
