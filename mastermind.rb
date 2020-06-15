@@ -163,18 +163,6 @@ class UserGuesserGame
 
 end
 
-class UserCreatorPlayer
-end
-
-class UserCreatorRound
-end
-
-class UserCreatorSolution
-end
-
-class UserCreatorGame
-end
-
 class Intro
 
   def initialize
