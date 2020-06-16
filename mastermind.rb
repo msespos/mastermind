@@ -141,7 +141,7 @@ class Game
   end
 
   # play a full 12-round game
-  def play
+  def play_user_guesser
     while @round.num_exact_matches != 4 && @num_rounds < 12
       @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
       puts "Round #{@num_rounds + 1}:\n\n"
@@ -150,6 +150,10 @@ class Game
       puts "12 rounds are up. You lose!\n\n" if @num_rounds == 12
       @round.did_user_win == true ? (puts "You win!\n\n") : (puts "Try again!\n\n")
     end
+  end
+
+  def play_user_creator
+    puts "Under construction"
   end
 
   def display_intro
@@ -171,18 +175,10 @@ class Game
     end
   end
 
-  def begin_game
-    if @user_game_selection == "1"
-      play
-    elsif @user_game_selection == "2"
-      puts "(will go to player-creator game at this point)"
-    end
-  end
-
   def start
     display_intro
     get_user_game_selection
-    begin_game
+    @user_game_selection == "1" ? play_user_guesser : play_user_creator
   end
 
 end
