@@ -1,14 +1,6 @@
 require 'colorize'
 
 class Player
-
-  attr_reader :user_guesses
-
-  def initialize
-    @user_guesses = []
-    get_guesses
-  end
-
 end
 
 class Round
@@ -54,8 +46,8 @@ class Round
     print "  "
   end
 
-  def display_score
-    display_guesses(@user_guesses)
+  def display_score(user_guesses)
+    display_guesses(user_guesses)
     if @num_exact_matches == 4
       @did_user_win = true
       puts (" ".on_black + " ") * 4 + "\n\n"
@@ -83,10 +75,10 @@ class Round
   # play a round
   def play(solution)
     p solution
-    @user_guesses = Player.new.user_guesses
-    find_exact_matches(@user_guesses, solution)
-    find_color_only_matches(@user_guesses, solution)
-    display_score
+    user_guesses = Code.new.get_user_code
+    find_exact_matches(user_guesses, solution)
+    find_color_only_matches(user_guesses, solution)
+    display_score(user_guesses)
   end
 
 end
@@ -104,10 +96,10 @@ class Code
   
   # print request for a code from user
   def request_code(type)
-    pick = type == "guess" ? "Guess" : "Select"
+    choose = type == "guess" ? "Guess" : "Select"
     choice = type == "guess" ? "guess" : "selection"
     puts <<~HEREDOC
-      #{pick} four colors from the following list
+      #{choose} four colors from the following list
       #{"red".light_red}, #{"yellow".light_yellow}, #{"green".light_green}, \
       #{"cyan".light_cyan}, #{"blue".light_blue}, and #{"magenta".light_magenta}
       Use the first letter of each color (in lower case) for your #{choice}
@@ -129,6 +121,7 @@ class Code
   # obtain a code from the user, reprompting until it is valid
   def get_user_code
     user_code = []
+    request_code("guess")
     until length_correct?(user_code) && colors_correct?(user_code)
       puts "Please enter your four guesses."
       user_code = gets.chomp.downcase.split("")
@@ -143,7 +136,7 @@ class Game
   def initialize
     @round = Round.new
     @num_rounds = 0
-    @solution = Solution.new.solution
+    @solution = Code.new.create_random_code
   end
 
   # play a full 12-round game
