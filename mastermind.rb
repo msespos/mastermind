@@ -75,7 +75,7 @@ class Round
   # play a round
   def play(solution)
     p solution
-    user_guesses = Code.new.get_user_code
+    user_guesses = Code.new.get_user_code("guess")
     find_exact_matches(user_guesses, solution)
     find_color_only_matches(user_guesses, solution)
     display_score(user_guesses)
@@ -119,11 +119,12 @@ class Code
   end
 
   # obtain a code from the user, reprompting until it is valid
-  def get_user_code
+  def get_user_code(type)
     user_code = []
-    request_code("guess")
+    request_code(type)
+    choices = type == "guess" ? "guesses" : "selections"
     until length_correct?(user_code) && colors_correct?(user_code)
-      puts "Please enter your four guesses."
+      puts "Please enter your four #{choices}."
       user_code = gets.chomp.downcase.split("")
     end
     user_code
@@ -136,12 +137,12 @@ class Game
   def initialize
     @round = Round.new
     @num_rounds = 0
-    @solution = Code.new.create_random_code
     @user_game_selection = 0
   end
 
   # play a full 12-round game
-  def play_user_guesser
+  def play_as_guesser
+    @solution = Code.new.create_random_code
     while @round.num_exact_matches != 4 && @num_rounds < 12
       @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
       puts "Round #{@num_rounds + 1}:\n\n"
@@ -152,8 +153,10 @@ class Game
     end
   end
 
-  def play_user_creator
-    puts "Under construction"
+  def play_as_creator
+    @solution = Code.new.get_user_code("solution")
+    p @solution
+    puts "Computer's turn"
   end
 
   def display_intro
@@ -178,7 +181,7 @@ class Game
   def start
     display_intro
     get_user_game_selection
-    @user_game_selection == "1" ? play_user_guesser : play_user_creator
+    @user_game_selection == "1" ? play_as_guesser : play_as_creator
   end
 
 end
