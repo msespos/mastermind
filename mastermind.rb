@@ -2,41 +2,11 @@ require 'colorize'
 
 class Player
 
-  @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
-
   attr_reader :user_guesses
 
   def initialize
     @user_guesses = []
     get_guesses
-  end
-  
-  # check that the user submits exactly four colors
-  def length_correct?(user_guesses)
-    user_guesses.length == 4
-  end
-
-  # check that the user submits only valid colors
-  def colors_correct?(user_guesses)
-    user_guesses.all? { |color| @@COLOR_INDEX.include?(color) }
-  end
-
-  # request and obtain the user's guesses, reprompting until they are valid
-  def get_guesses
-      #  #{" ".on_light_red + " " + " ".on_light_yellow + " " + " ".on_light_green +
-      #  " " + " ".on_light_cyan + " " + " ".on_light_blue + " " + " ".on_light_magenta}
-    puts <<~HEREDOC
-        Guess four colors from the following list
-        #{"red".light_red}, #{"yellow".light_yellow}, #{"green".light_green}, \
-        #{"cyan".light_cyan}, #{"blue".light_blue}, and #{"magenta".light_magenta}
-        Use the first letter of each color (in lower case) for your guess
-        e.g. rygc
-              
-      HEREDOC
-    until length_correct?(@user_guesses) && colors_correct?(@user_guesses)
-      puts "Please enter your four guesses."
-      @user_guesses = gets.chomp.downcase.split("")
-    end
   end
 
 end
@@ -121,22 +91,49 @@ class Round
 
 end
 
-class Solution
+class Code
 
   @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
 
-  attr_reader :solution
-
-  # create a randomized solution array
-  def initialize
-    @solution = []
-    0.upto(3) { @solution.push(rand(6)) }
-    translate_to_colors(@solution)
+  # create a randomized code
+  def create_random_code
+    random_code = []
+    0.upto(3) { random_code.push(rand(6)) }
+    random_code.each_with_index { |num, i| random_code[i] = @@COLOR_INDEX[num] }
   end
   
-  # transform an array of numbers to the corresponding COLOR_INDEX colors
-  def translate_to_colors(solution)
-    solution.each_with_index { |num, i| solution[i] = @@COLOR_INDEX[num] }
+  # print request for a code from user
+  def request_code(type)
+    pick = type == "guess" ? "Guess" : "Select"
+    choice = type == "guess" ? "guess" : "selection"
+    puts <<~HEREDOC
+      #{pick} four colors from the following list
+      #{"red".light_red}, #{"yellow".light_yellow}, #{"green".light_green}, \
+      #{"cyan".light_cyan}, #{"blue".light_blue}, and #{"magenta".light_magenta}
+      Use the first letter of each color (in lower case) for your #{choice}
+      e.g. rygc or rrbb
+
+    HEREDOC
+  end
+
+  # check that a code has exactly four colors
+  def length_correct?(user_guesses)
+    user_guesses.length == 4
+  end
+
+  # check that a code has only valid colors
+  def colors_correct?(user_guesses)
+    user_guesses.all? { |color| @@COLOR_INDEX.include?(color) }
+  end
+
+  # obtain a code from the user, reprompting until it is valid
+  def get_user_code
+    user_code = []
+    until length_correct?(user_code) && colors_correct?(user_code)
+      puts "Please enter your four guesses."
+      user_code = gets.chomp.downcase.split("")
+    end
+    user_code
   end
 
 end
