@@ -140,7 +140,7 @@ class Game
     @user_game_selection = 0
   end
 
-  # play a full 12-round game
+  # play a full 12-round game with the user as the guesser
   def play_as_guesser
     @solution = Code.new.create_random_code
     while @round.num_exact_matches != 4 && @num_rounds < 12
@@ -153,6 +153,7 @@ class Game
     end
   end
 
+  # play a full 12-round game with the user as the codemaker
   def play_as_creator
     @solution = Code.new.get_user_code("solution")
     p @solution
@@ -178,6 +179,7 @@ class Game
     end
   end
 
+  # start the game by getting the user's game selection and playing that version
   def start
     display_intro
     get_user_game_selection
