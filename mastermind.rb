@@ -13,6 +13,7 @@ class Round
   attr_reader :num_exact_matches, :win_state
 
   def initialize
+    @exact_matches = []
     @num_exact_matches = 0
     @num_color_only_matches = 0
     @win_state = false
@@ -20,8 +21,8 @@ class Round
 
   # identify the number of exact matches and store it in @num_exact_matches
   def find_exact_matches(guesses, solution)
-    exact_matches = guesses.zip(solution).map { |x, y| x == y }
-    @num_exact_matches = exact_matches.count(true)
+    @exact_matches = guesses.zip(solution).map { |x, y| x == y }
+    @num_exact_matches = @exact_matches.count(true)
   end
 
   # identify the number of color-only matches and store it in @num_color_only_matches
