@@ -5,6 +5,11 @@ end
 
 class Round
 
+  @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
+  @@BACKGROUND_COLORS = ["on_light_red", "on_light_yellow",
+                          "on_light_green", "on_light_cyan",
+                          "on_light_blue", "on_light_magenta"]
+  
   attr_reader :num_exact_matches, :win_state
 
   def initialize
@@ -26,32 +31,21 @@ class Round
     @num_color_only_matches = color_only_matches.length unless color_only_matches == false
   end
   
-  def display_guesses(guesses)
+  def display_colors(guesses)
     puts "\n"
     guesses.each do |guess|
-      if guess == "r"
-        print " ".on_light_red + " "
-      elsif guess == "y"
-        print " ".on_light_yellow + " "
-      elsif guess == "g"
-        print " ".on_light_green + " "
-      elsif guess == "c"
-        print " ".on_light_cyan + " "
-      elsif guess == "b"
-        print " ".on_light_blue + " "
-      elsif guess == "m"
-        print " ".on_light_magenta + " "
-      end
+      guess_index = @@COLOR_INDEX.index(guess)
+      print " ".send(@@BACKGROUND_COLORS[guess_index]) + " "
     end
     print "  "
   end
 
   def display_score(guesses, solution, game_version)
     if game_version == "creator"
-      display_guesses(solution)
+      display_colors(solution)
     end
     puts "\n"
-    display_guesses(guesses)
+    display_colors(guesses)
     if @num_exact_matches == 4
       @win_state = true
       puts (" ".on_black + " ") * 4 + "\n\n"
