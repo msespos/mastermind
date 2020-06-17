@@ -147,39 +147,55 @@ class Game
     @round = Round.new
     @num_rounds = 0
     @user_game_selection = 0
+    @solution = []
+  end
+
+  # create a solution based on the game version selected
+  def create_solution(game_version)
+    if game_version == "guesser"
+      @solution = Code.new.create_random_code
+    elsif game_version == "creator"
+      @solution = Code.new.get_user_code("solution")
+    end
+  end
+
+  # play a round of the chosen version of the game
+  def play_round(game_version)
+    @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
+    puts "Round #{@num_rounds + 1}:\n\n"
+    if game_version == "guesser"
+      @round.play(@solution, "guesser")
+    elsif game_version == "creator"
+      puts "Computer guesses:"
+      @round.play(@solution, "creator")
+    end
+    @num_rounds += 1
+  end
+
+  # report the state of the game to the user
+  def report_state(game_version)
+    if game_version == "guesser"
+      if @num_rounds == 12
+        @round.win_state ? (puts "You win!") : (puts "12 rounds are up. You lose!")
+      else
+        @round.win_state ? (puts "You win!") : (puts "Try again!")
+      end
+    elsif game_version == "creator"
+      if @num_rounds == 12
+        @round.win_state ? (puts "Computer wins!") : (puts "12 rounds are up. Computer loses!")
+      else
+        puts "Press return to play another round"
+        gets.chomp
+      end
+    end
   end
 
   # play a full 12-round game
   def play(game_version)
-    if game_version == "guesser"
-      solution = Code.new.create_random_code
-    elsif game_version == "creator"
-      solution = Code.new.get_user_code("solution")
-    end
+    create_solution(game_version)
     while @round.num_exact_matches != 4 && @num_rounds < 12
-      @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
-      puts "Round #{@num_rounds + 1}:\n\n"
-      if game_version == "guesser"
-        @round.play(solution, "guesser")
-      elsif game_version == "creator"
-        puts "Computer guesses:"
-        @round.play(solution, "creator")
-      end
-      @num_rounds += 1
-      if game_version == "guesser"
-        if @num_rounds == 12
-          @round.win_state ? (puts "You win!") : (puts "12 rounds are up. You lose!")
-        else
-          @round.win_state ? (puts "You win!") : (puts "Try again!")
-        end
-      elsif game_version == "creator"
-        if @num_rounds == 12
-          @round.win_state ? (puts "Computer wins!") : (puts "12 rounds are up. Computer loses!")
-        else
-          puts "Press return to play another round"
-          gets.chomp
-        end
-      end
+      play_round(game_version)
+      report_state(game_version)
       puts "\n\n"
     end
   end
