@@ -46,8 +46,8 @@ class Round
     print "  "
   end
 
-  def display_score(user_guesses)
-    display_guesses(user_guesses)
+  def display_score(guesses)
+    display_guesses(guesses)
     if @num_exact_matches == 4
       @did_user_win = true
       puts (" ".on_black + " ") * 4 + "\n\n"
@@ -73,12 +73,16 @@ class Round
   end
 
   # play a round
-  def play(solution)
+  def play(solution, game_version)
     p solution
-    user_guesses = Code.new.get_user_code("guess")
-    find_exact_matches(user_guesses, solution)
-    find_color_only_matches(user_guesses, solution)
-    display_score(user_guesses)
+    if game_version == "guesser"
+      guesses = Code.new.get_user_code("guess")
+    elsif game_version == "creator"
+      guesses = Code.new.create_random_code
+    end
+    find_exact_matches(guesses, solution)
+    find_color_only_matches(guesses, solution)
+    display_score(guesses)
   end
 
 end
@@ -140,24 +144,39 @@ class Game
     @user_game_selection = 0
   end
 
-  # play a full 12-round game with the user as the guesser
-  def play_as_guesser
-    @solution = Code.new.create_random_code
+  # play a full 12-round game
+  def play(game_version)
+    if game_version == "guesser"
+      play_user_guesser
+    elsif game_version == "creator"
+      play_user_creator
+    end
+  end
+
+  def play_user_guesser
+    solution = Code.new.create_random_code
     while @round.num_exact_matches != 4 && @num_rounds < 12
       @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
       puts "Round #{@num_rounds + 1}:\n\n"
-      @round.play(@solution)
+      @round.play(solution, "guesser")
       @num_rounds += 1
       puts "12 rounds are up. You lose!\n\n" if @num_rounds == 12
       @round.did_user_win == true ? (puts "You win!\n\n") : (puts "Try again!\n\n")
     end
   end
 
-  # play a full 12-round game with the user as the codemaker
-  def play_as_creator
-    @solution = Code.new.get_user_code("solution")
-    p @solution
-    puts "Computer's turn"
+  def play_user_creator
+    solution = Code.new.get_user_code("solution")
+    while @round.num_exact_matches != 4 && @num_rounds < 12
+      @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
+      puts "Round #{@num_rounds + 1}:\n\n"
+      @round.play(solution, "creator")
+      @num_rounds += 1
+      puts "12 rounds are up. Computer loses!\n\n" if @num_rounds == 12
+      puts "Press any key to play another round\n\n"
+      gets.chomp
+      @round.did_user_win == true ? (puts "Computer wins!\n\n") : (puts "Computer tries again!\n\n")
+    end
   end
 
   def display_intro
@@ -183,7 +202,7 @@ class Game
   def start
     display_intro
     get_user_game_selection
-    @user_game_selection == "1" ? play_as_guesser : play_as_creator
+    @user_game_selection == "1" ? play("guesser") : play("creator")
   end
 
 end
