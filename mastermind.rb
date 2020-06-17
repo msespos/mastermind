@@ -46,11 +46,13 @@ class Round
     print "  "
   end
 
-  def display_score(guesses, solution)
+  def display_score(guesses, solution, game_version)
     display_guesses(guesses)
     puts "\n\n"
-    display_guesses(solution)
-    puts "\n\n"
+    if game_version == "creator"
+      display_guesses(solution)
+      puts "\n\n"
+    end
     if @num_exact_matches == 4
       @did_user_win = true
       puts "4 exact matches.\n\n"
@@ -86,7 +88,7 @@ class Round
     end
     find_exact_matches(guesses, solution)
     find_color_only_matches(guesses, solution)
-    display_score(guesses, solution)
+    display_score(guesses, solution, game_version)
   end
 
 end
@@ -170,9 +172,9 @@ class Game
         @round.did_user_win == true ? (puts "You win!\n\n") : (puts "Try again!\n\n")
       elsif game_version == "creator"
         puts "12 rounds are up. Computer loses!\n\n" if @num_rounds == 12
-        puts "Press return to play another round\n\n"
+        puts "Press return to play another round\n\n" if @num_rounds < 12
         gets.chomp
-        @round.did_user_win == true ? (puts "Computer wins!\n\n") : (puts "Computer tries again!\n\n")
+        @round.did_user_win == true ? (puts "Computer wins!\n\n") : (puts "The End!\n\n")
       end
     end
   end
