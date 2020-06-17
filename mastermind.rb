@@ -147,35 +147,28 @@ class Game
   # play a full 12-round game
   def play(game_version)
     if game_version == "guesser"
-      play_user_guesser
+      solution = Code.new.create_random_code
     elsif game_version == "creator"
-      play_user_creator
+      solution = Code.new.get_user_code("solution")
     end
-  end
-
-  def play_user_guesser
-    solution = Code.new.create_random_code
     while @round.num_exact_matches != 4 && @num_rounds < 12
       @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
       puts "Round #{@num_rounds + 1}:\n\n"
-      @round.play(solution, "guesser")
+      if game_version == "guesser"
+        @round.play(solution, "guesser")
+      elsif game_version == "creator"
+        @round.play(solution, "creator")
+      end
       @num_rounds += 1
-      puts "12 rounds are up. You lose!\n\n" if @num_rounds == 12
-      @round.did_user_win == true ? (puts "You win!\n\n") : (puts "Try again!\n\n")
-    end
-  end
-
-  def play_user_creator
-    solution = Code.new.get_user_code("solution")
-    while @round.num_exact_matches != 4 && @num_rounds < 12
-      @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
-      puts "Round #{@num_rounds + 1}:\n\n"
-      @round.play(solution, "creator")
-      @num_rounds += 1
-      puts "12 rounds are up. Computer loses!\n\n" if @num_rounds == 12
-      puts "Press any key to play another round\n\n"
-      gets.chomp
-      @round.did_user_win == true ? (puts "Computer wins!\n\n") : (puts "Computer tries again!\n\n")
+      if game_version == "guesser"
+        puts "12 rounds are up. You lose!\n\n" if @num_rounds == 12
+        @round.did_user_win == true ? (puts "You win!\n\n") : (puts "Try again!\n\n")
+      elsif game_version == "creator"
+        puts "12 rounds are up. Computer loses!\n\n" if @num_rounds == 12
+        puts "Press return to play another round\n\n"
+        gets.chomp
+        @round.did_user_win == true ? (puts "Computer wins!\n\n") : (puts "Computer tries again!\n\n")
+      end
     end
   end
 
@@ -183,7 +176,7 @@ class Game
     puts <<~HEREDOC
 
       Welcome to Mastermind!
-      Would you like to be the guessor or the creator of the secret code?
+      Would you like to be the guesser or the creator of the secret code?
       Enter 1 to be the guesser
       Enter 2 to be the creator
 
