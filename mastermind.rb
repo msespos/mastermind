@@ -5,12 +5,12 @@ end
 
 class Round
 
-  attr_reader :num_exact_matches, :did_user_win
+  attr_reader :num_exact_matches, :win_state
 
   def initialize
     @num_exact_matches = 0
     @num_color_only_matches = 0
-    @did_user_win = false
+    @win_state = false
   end
 
   # identify the number of exact matches and store it in @num_exact_matches
@@ -53,7 +53,7 @@ class Round
     puts "\n"
     display_guesses(guesses)
     if @num_exact_matches == 4
-      @did_user_win = true
+      @win_state = true
       puts (" ".on_black + " ") * 4 + "\n\n"
       puts "4 exact matches.\n\n"
     elsif @num_exact_matches == 1 && @num_color_only_matches == 1
@@ -167,14 +167,20 @@ class Game
       end
       @num_rounds += 1
       if game_version == "guesser"
-        puts "12 rounds are up. You lose!\n\n" if @num_rounds == 12
-        @round.did_user_win ? (puts "You win!\n\n") : (puts "Try again!\n\n" if @num_rounds < 12)
+        if @num_rounds == 12
+          @round.win_state ? (puts "You win!") : (puts "12 rounds are up. You lose!")
+        else
+          @round.win_state ? (puts "You win!") : (puts "Try again!")
+        end
       elsif game_version == "creator"
-        puts "12 rounds are up. Computer loses!\n\n" if @num_rounds == 12
-        puts "Press return to play another round\n\n" if @num_rounds < 12
-        gets.chomp
-        @round.did_user_win ? (puts "Computer wins!\n\n") : (puts "The End!\n\n")
+        if @num_rounds == 12
+          @round.win_state ? (puts "Computer wins!") : (puts "12 rounds are up. Computer loses!")
+        else
+          puts "Press return to play another round"
+          gets.chomp
+        end
       end
+      puts "\n\n"
     end
   end
 
