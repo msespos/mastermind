@@ -5,7 +5,7 @@ end
 
 class Round
 
-  @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
+  @@COLOR_LIST = ["r", "y", "g", "c", "b", "m"]
   @@BACKGROUND_COLORS = ["on_light_red", "on_light_yellow",
                           "on_light_green", "on_light_cyan",
                           "on_light_blue", "on_light_magenta"]
@@ -31,44 +31,35 @@ class Round
     @num_color_only_matches = color_only_matches.length unless color_only_matches == false
   end
   
-  def display_colors(guesses)
+  # display the color blocks 
+  def display_colors(colors)
     puts "\n"
-    guesses.each do |guess|
-      guess_index = @@COLOR_INDEX.index(guess)
-      print " ".send(@@BACKGROUND_COLORS[guess_index]) + " "
+    colors.each do |color|
+      color_index = @@COLOR_LIST.index(color)
+      print " ".send(@@BACKGROUND_COLORS[color_index]) + " "
     end
     print "  "
   end
 
+  # display the colors and text representing the score for a round
   def display_score(guesses, solution, game_version)
+    @num_exact_matches == 1 ? exact_noun = "match" : exact_noun = "matches"
+    @num_color_only_matches == 1 ? color_only_noun = "match" : color_only_noun = "matches"
     if game_version == "creator"
       display_colors(solution)
     end
     puts "\n"
     display_colors(guesses)
+    puts (" ".on_black + " ") * @num_exact_matches +
+        (" ".on_white + " ") * @num_color_only_matches + "\n\n"
     if @num_exact_matches == 4
       @win_state = true
-      puts (" ".on_black + " ") * 4 + "\n\n"
-      puts "4 exact matches.\n\n"
-    elsif @num_exact_matches == 1 && @num_color_only_matches == 1
-      puts " ".on_black + " " + " ".on_white + "\n\n"
-      puts "1 exact match and 1 color-only match.\n\n"
-    elsif @num_exact_matches == 1 && @num_color_only_matches != 1
-      puts " ".on_black + " " + (" ".on_white + " ") *
-          @num_color_only_matches + "\n\n"
-      puts "1 exact match and #{@num_color_only_matches} "\
-          "color-only matches.\n\n"
-    elsif @num_exact_matches != 1 && @num_color_only_matches == 1
-      puts (" ".on_black + " ") * @num_exact_matches +
-          " ".on_white + "\n\n"
-      puts "#{@num_exact_matches} exact matches and 1 color-only match.\n\n"
+      puts "4 exact matches."
     else
-      puts (" ".on_black + " ") * @num_exact_matches +
-          (" ".on_white + " ") * @num_color_only_matches + "\n\n"
-      puts "#{@num_exact_matches} exact matches and "\
-          "#{@num_color_only_matches} color-only matches.\n\n"
+      puts "#{@num_exact_matches} exact #{exact_noun} and "\
+          "#{@num_color_only_matches} color-only #{color_only_noun}."
     end
-    puts "\n"
+    puts "\n\n\n"
   end
 
   # play a round
@@ -88,13 +79,13 @@ end
 
 class Code
 
-  @@COLOR_INDEX = ["r", "y", "g", "c", "b", "m"]
+  @@COLOR_LIST = ["r", "y", "g", "c", "b", "m"]
 
   # create a randomized code
   def create_random_code
     random_code = []
     0.upto(3) { random_code.push(rand(6)) }
-    random_code.each_with_index { |num, i| random_code[i] = @@COLOR_INDEX[num] }
+    random_code.each_with_index { |num, i| random_code[i] = @@COLOR_LIST[num] }
   end
   
   # print request for a code from user
@@ -118,7 +109,7 @@ class Code
 
   # check that a code has only valid colors
   def colors_correct?(user_guesses)
-    user_guesses.all? { |color| @@COLOR_INDEX.include?(color) }
+    user_guesses.all? { |color| @@COLOR_LIST.include?(color) }
   end
 
   # obtain a code from the user, reprompting until it is valid
