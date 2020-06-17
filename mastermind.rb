@@ -47,33 +47,32 @@ class Round
   end
 
   def display_score(guesses, solution, game_version)
-    display_guesses(guesses)
-    puts "\n\n"
     if game_version == "creator"
       display_guesses(solution)
-      puts "\n\n"
     end
+    puts "\n"
+    display_guesses(guesses)
     if @num_exact_matches == 4
       @did_user_win = true
+      puts (" ".on_black + " ") * 4 + "\n\n"
       puts "4 exact matches.\n\n"
-      puts (" ".on_black + " ") * 4
     elsif @num_exact_matches == 1 && @num_color_only_matches == 1
+      puts " ".on_black + " " + " ".on_white + "\n\n"
       puts "1 exact match and 1 color-only match.\n\n"
-      puts " ".on_black + " " + " ".on_white
     elsif @num_exact_matches == 1 && @num_color_only_matches != 1
+      puts " ".on_black + " " + (" ".on_white + " ") *
+          @num_color_only_matches + "\n\n"
       puts "1 exact match and #{@num_color_only_matches} "\
           "color-only matches.\n\n"
-      puts " ".on_black + " " + (" ".on_white + " ") *
-          @num_color_only_matches
     elsif @num_exact_matches != 1 && @num_color_only_matches == 1
-      puts "#{@num_exact_matches} exact matches and 1 color-only match.\n\n"
       puts (" ".on_black + " ") * @num_exact_matches +
-      " ".on_white
+          " ".on_white + "\n\n"
+      puts "#{@num_exact_matches} exact matches and 1 color-only match.\n\n"
     else
+      puts (" ".on_black + " ") * @num_exact_matches +
+          (" ".on_white + " ") * @num_color_only_matches + "\n\n"
       puts "#{@num_exact_matches} exact matches and "\
           "#{@num_color_only_matches} color-only matches.\n\n"
-      puts (" ".on_black + " ") * @num_exact_matches + 
-          (" ".on_white + " ") * @num_color_only_matches
     end
     puts "\n"
   end
@@ -169,12 +168,12 @@ class Game
       @num_rounds += 1
       if game_version == "guesser"
         puts "12 rounds are up. You lose!\n\n" if @num_rounds == 12
-        @round.did_user_win == true ? (puts "You win!\n\n") : (puts "Try again!\n\n")
+        @round.did_user_win ? (puts "You win!\n\n") : (puts "Try again!\n\n" if @num_rounds < 12)
       elsif game_version == "creator"
         puts "12 rounds are up. Computer loses!\n\n" if @num_rounds == 12
         puts "Press return to play another round\n\n" if @num_rounds < 12
         gets.chomp
-        @round.did_user_win == true ? (puts "Computer wins!\n\n") : (puts "The End!\n\n")
+        @round.did_user_win ? (puts "Computer wins!\n\n") : (puts "The End!\n\n")
       end
     end
   end
