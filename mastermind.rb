@@ -46,30 +46,34 @@ class Round
     print "  "
   end
 
-  def display_score(guesses)
+  def display_score(guesses, solution)
     display_guesses(guesses)
+    puts "\n\n"
+    display_guesses(solution)
+    puts "\n\n"
     if @num_exact_matches == 4
       @did_user_win = true
-      puts (" ".on_black + " ") * 4 + "\n\n"
       puts "4 exact matches.\n\n"
+      puts (" ".on_black + " ") * 4
     elsif @num_exact_matches == 1 && @num_color_only_matches == 1
-      puts " ".on_black + " " + " ".on_white + "\n\n"
       puts "1 exact match and 1 color-only match.\n\n"
+      puts " ".on_black + " " + " ".on_white
     elsif @num_exact_matches == 1 && @num_color_only_matches != 1
-      puts " ".on_black + " " + (" ".on_white + " ") *
-          @num_color_only_matches + "\n\n"
       puts "1 exact match and #{@num_color_only_matches} "\
           "color-only matches.\n\n"
+      puts " ".on_black + " " + (" ".on_white + " ") *
+          @num_color_only_matches
     elsif @num_exact_matches != 1 && @num_color_only_matches == 1
-      puts (" ".on_black + " ") * @num_exact_matches +
-          " ".on_white + "\n\n"
       puts "#{@num_exact_matches} exact matches and 1 color-only match.\n\n"
+      puts (" ".on_black + " ") * @num_exact_matches +
+      " ".on_white
     else
-      puts (" ".on_black + " ") * @num_exact_matches + 
-          (" ".on_white + " ") * @num_color_only_matches + "\n\n"
       puts "#{@num_exact_matches} exact matches and "\
           "#{@num_color_only_matches} color-only matches.\n\n"
+      puts (" ".on_black + " ") * @num_exact_matches + 
+          (" ".on_white + " ") * @num_color_only_matches
     end
+    puts "\n"
   end
 
   # play a round
@@ -82,7 +86,7 @@ class Round
     end
     find_exact_matches(guesses, solution)
     find_color_only_matches(guesses, solution)
-    display_score(guesses)
+    display_score(guesses, solution)
   end
 
 end
@@ -157,6 +161,7 @@ class Game
       if game_version == "guesser"
         @round.play(solution, "guesser")
       elsif game_version == "creator"
+        puts "Computer guesses:"
         @round.play(solution, "creator")
       end
       @num_rounds += 1
