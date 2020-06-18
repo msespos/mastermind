@@ -76,10 +76,14 @@ class Round
     guesses_without_exact_matches = guesses.zip(solution).delete_if { |x, y| x == y }
     remaining_guesses = guesses_without_exact_matches.transpose[0]
     remaining_solution = guesses_without_exact_matches.transpose[1]
-    color_only_matches = (remaining_guesses | remaining_solution).flat_map do |entry|
-      [entry] * [remaining_guesses.count(entry), remaining_solution.count(entry)].min
+    if (remaining_guesses | remaining_solution)
+      color_only_matches = (remaining_guesses | remaining_solution).flat_map do |entry|
+        [entry] * [remaining_guesses.count(entry), remaining_solution.count(entry)].min
+      end
+    else
+      color_only_matches = []
     end
-    @num_color_only_matches = color_only_matches.length unless color_only_matches == false
+    @num_color_only_matches = color_only_matches.length
   end
   
   # display the color blocks 
