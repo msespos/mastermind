@@ -76,6 +76,8 @@ class Round
     guesses_without_exact_matches = guesses.zip(solution).delete_if { |x, y| x == y }
     remaining_guesses = guesses_without_exact_matches.transpose[0]
     remaining_solution = guesses_without_exact_matches.transpose[1]
+    # https://stackoverflow.com/questions/37800483/
+      # intersections-and-unions-in-ruby-for-sets-with-repeated-elements
     if (remaining_guesses | remaining_solution)
       color_only_matches = (remaining_guesses | remaining_solution).flat_map do |entry|
         [entry] * [remaining_guesses.count(entry), remaining_solution.count(entry)].min
