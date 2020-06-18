@@ -124,14 +124,13 @@ class Round
     display_matches
   end
 
+  # update the computer's guesses each round based on previous success
   def update_computer_guesses(computer_guesses, num_rounds, solution)
     if num_rounds == 0
-      return @computer_guesses = Code.new.create_random_code
+      @computer_guesses = Code.new.create_random_code
     else
-      return @computer_guesses = @computer_guesses.each_with_index do |guess, i|
-        if guess != solution[i]
-          @computer_guesses[i] = @@COLOR_LIST.sample
-        end
+      @computer_guesses.each_with_index do |guess, i|
+        @computer_guesses[i] = @@COLOR_LIST.sample if guess != solution[i]
       end
     end
   end
