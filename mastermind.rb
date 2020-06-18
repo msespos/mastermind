@@ -8,6 +8,7 @@ class Code
   def create_random_code
     random_code = []
     0.upto(3) { random_code.push(@@COLOR_LIST.sample) }
+    random_code
   end
 
   # print request for a code from user
