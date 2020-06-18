@@ -193,8 +193,12 @@ class Game
       if @num_rounds == 12
         @round.win_state ? (puts "Computer wins!") : (puts "12 rounds are up. Computer loses!")
       else
-        puts "Press return to play another round"
-        gets.chomp
+        if @round.win_state
+          puts "Computer wins!"
+        else
+          puts "Press return to play another round"
+          gets.chomp
+        end
       end
     end
   end
