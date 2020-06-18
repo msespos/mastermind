@@ -98,17 +98,10 @@ class Round
     print "  "
   end
 
-  # display the colors and text representing the score for a round
-  def display_score(guesses, solution, game_version)
-    @num_exact_matches == 1 ? exact_noun = "match" : exact_noun = "matches"
-    @num_color_only_matches == 1 ? color_only_noun = "match" : color_only_noun = "matches"
-    if game_version == "creator"
-      display_colors(solution)
-    end
-    puts "\n"
-    display_colors(guesses)
-    puts (" ".on_black + " ") * @num_exact_matches +
-        (" ".on_white + " ") * @num_color_only_matches + "\n\n"
+  # display the text describing the score for a round
+  def display_matches
+    exact_noun = @num_exact_matches == 1 ? "match" : "matches"
+    color_only_noun = @num_color_only_matches == 1 ? "match" : "matches"
     if @num_exact_matches == 4
       @win_state = true
       puts "4 exact matches."
@@ -117,6 +110,18 @@ class Round
           "#{@num_color_only_matches} color-only #{color_only_noun}."
     end
     puts "\n\n"
+  end
+
+  # display the colors and text representing the score for a round
+  def display_score(guesses, solution, game_version)
+    if game_version == "creator"
+      display_colors(solution)
+    end
+    puts "\n"
+    display_colors(guesses)
+    puts (" ".on_black + " ") * @num_exact_matches +
+        (" ".on_white + " ") * @num_color_only_matches + "\n\n"
+    display_matches
   end
 
   # play a round
