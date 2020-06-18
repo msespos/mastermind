@@ -124,13 +124,25 @@ class Round
     display_matches
   end
 
+  def update_computer_guesses(computer_guesses, num_rounds, solution)
+    if num_rounds == 0
+      return @computer_guesses = Code.new.create_random_code
+    else
+      return @computer_guesses = @computer_guesses.each_with_index do |guess, i|
+        if guess != solution[i]
+          @computer_guesses[i] = @@COLOR_LIST.sample
+        end
+      end
+    end
+  end
+
   # play a round
-  def play(solution, game_version)
+  def play(solution, game_version, num_rounds = 0)
     p solution
     if game_version == "guesser"
       guesses = Code.new.get_user_code("guess")
     elsif game_version == "creator"
-      guesses = Code.new.create_random_code
+      guesses = update_computer_guesses(@computer_guesses, num_rounds, solution)
     end
     find_exact_matches(guesses, solution)
     find_color_only_matches(guesses, solution)
@@ -159,13 +171,13 @@ class Game
 
   # play a round of the chosen version of the game
   def play_round(game_version)
-    @num_rounds == 11 ? (puts "Last round!\n\n") : (puts "#{12 - @num_rounds} rounds left!\n\n")
-    puts "Round #{@num_rounds + 1}:\n\n"
+    @num_rounds == 11 ? (puts "Last round!") : (puts "#{12 - @num_rounds} rounds left!")
+    puts "\n\nRound #{@num_rounds + 1}:\n\n"
     if game_version == "guesser"
       @round.play(@solution, "guesser")
     elsif game_version == "creator"
       puts "Computer is guessing:"
-      @round.play(@solution, "creator")
+      @round.play(@solution, "creator", @num_rounds)
     end
     @num_rounds += 1
   end
