@@ -7,8 +7,7 @@ class Code
   # create a randomized code
   def create_random_code
     random_code = []
-    0.upto(3) { random_code.push(rand(6)) }
-    random_code.each_with_index { |num, i| random_code[i] = @@COLOR_LIST[num] }
+    0.upto(3) { random_code.push(@@COLOR_LIST.sample) }
   end
 
   # print request for a code from user
@@ -106,7 +105,7 @@ class Round
       puts "#{@num_exact_matches} exact #{exact_noun} and "\
           "#{@num_color_only_matches} color-only #{color_only_noun}."
     end
-    puts "\n\n\n"
+    puts "\n\n"
   end
 
   # play a round
@@ -149,7 +148,7 @@ class Game
     if game_version == "guesser"
       @round.play(@solution, "guesser")
     elsif game_version == "creator"
-      puts "Computer guesses:"
+      puts "Computer is guessing:"
       @round.play(@solution, "creator")
     end
     @num_rounds += 1
