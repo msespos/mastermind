@@ -74,7 +74,11 @@ class Round
   # identify the number of color-only matches and store it in @num_color_only_matches
   def find_color_only_matches(guesses, solution)
     guesses_without_exact_matches = guesses.zip(solution).delete_if { |x, y| x == y }
-    color_only_matches = guesses_without_exact_matches.transpose[0] & guesses_without_exact_matches.transpose[1]
+    remaining_guesses = guesses_without_exact_matches.transpose[0]
+    remaining_solution = guesses_without_exact_matches.transpose[1]
+    color_only_matches = (remaining_guesses | remaining_solution).flat_map do |entry|
+      [entry] * [remaining_guesses.count(entry), remaining_solution.count(entry)].min
+    end
     @num_color_only_matches = color_only_matches.length unless color_only_matches == false
   end
   
