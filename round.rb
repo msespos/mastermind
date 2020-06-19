@@ -10,6 +10,7 @@ class Round
   def initialize
     @exact_matches = []
     @num_exact_matches = 0
+    @color_only_matches = []
     @num_color_only_matches = 0
     @win_state = false
   end
@@ -28,13 +29,11 @@ class Round
     # https://stackoverflow.com/questions/37800483/
       # intersections-and-unions-in-ruby-for-sets-with-repeated-elements
     if (remaining_guesses | remaining_solution)
-      color_only_matches = (remaining_guesses | remaining_solution).flat_map do |entry|
+      @color_only_matches = (remaining_guesses | remaining_solution).flat_map do |entry|
         [entry] * [remaining_guesses.count(entry), remaining_solution.count(entry)].min
       end
-    else
-      color_only_matches = []
     end
-    @num_color_only_matches = color_only_matches.length
+    @num_color_only_matches = @color_only_matches.length
   end
   
   # display the color blocks 
