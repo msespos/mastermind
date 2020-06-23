@@ -32,6 +32,8 @@ class Round
       @color_only_matches = (remaining_guesses | remaining_solution).flat_map do |entry|
         [entry] * [remaining_guesses.count(entry), remaining_solution.count(entry)].min
       end
+    else
+      @color_only_matches = []
     end
     @num_color_only_matches = @color_only_matches.length
   end
@@ -72,7 +74,7 @@ class Round
     display_matches
   end
 
-  # update the computer's guesses each round based on previous success
+  # update the computer's guesses each round based on previous results
   def update_computer_guesses(computer_guesses, num_rounds, solution)
     if num_rounds == 0
       @computer_guesses = Code.new.create_random_code
