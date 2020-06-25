@@ -28,13 +28,10 @@ class Game
       board_update = @round.play(@solution, "creator", @num_rounds)
     end
     if game_version == "creator"
-      @board.display_colors(["r", "g", "r", "g"])
+      @board.display_colors(@solution)
     end
-    puts "\n"
-    @board.display_colors(["r", "r", "r", "r"])
-    puts (" ".on_black + " ") * @round.num_exact_matches +
-        (" ".on_white + " ") * @round.num_color_only_matches + "\n\n"
     @board.update_board_state(board_update)
+    @board.display_current_board(@board.board_state)
     p @board.board_state  
     @num_rounds += 1
   end

@@ -15,12 +15,23 @@ class Board
 
   # display the color blocks
   def display_colors(colors)
-    puts "\n"
     colors.each do |color|
       color_index = @@COLOR_LIST.index(color)
       print " ".send(@@BACKGROUND_COLORS[color_index]) + " "
     end
     print "  "
+  end
+
+  def display_score(score)
+    puts (" ".on_black + " ") * score[0] + (" ".on_white + " ") * score[1]
+  end
+
+  def display_current_board(board_state)
+    board_state.each do |row|
+      display_colors(row[0])
+      display_score(row[1])
+      puts "\n"
+    end
   end
 
 end

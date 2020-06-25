@@ -42,25 +42,6 @@ class Round
     @num_color_only_matches = @color_only_matches.length
   end
 
-  # display the text describing the score for a round
-  def display_matches
-    exact_noun = @num_exact_matches == 1 ? "match" : "matches"
-    color_only_noun = @num_color_only_matches == 1 ? "match" : "matches"
-    if @num_exact_matches == 4
-      @win_state = true
-      puts "4 exact matches."
-    else
-      puts "#{@num_exact_matches} exact #{exact_noun} and "\
-          "#{@num_color_only_matches} color-only #{color_only_noun}."
-    end
-    puts "\n\n"
-  end
-
-  # display the colors and text representing the score for a round
-  def display_score(guesses, solution, game_version)
-    display_matches
-  end
-
   # update the computer's guesses each round based on previous results
   def update_computer_guesses(computer_guesses, num_rounds, solution)
     if num_rounds == 0
@@ -82,7 +63,7 @@ class Round
     end
     find_exact_matches(guesses, solution)
     find_color_only_matches(guesses, solution)
-    display_score(guesses, solution, game_version)
+    num_exact_matches == 4 ? @win_state = true : @win_state = false
     board_update = [guesses, [@num_exact_matches, @num_color_only_matches]]
   end
 
