@@ -1,6 +1,7 @@
 class Code
 
-  @@COLOR_LIST = ["r", "y", "g", "c", "b", "m"]
+  require_relative 'colors.rb'
+  include Colors
 
   # create a randomized code
   def create_random_code

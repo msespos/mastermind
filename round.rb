@@ -1,11 +1,9 @@
 class Round
 
-  @@COLOR_LIST = ["r", "y", "g", "c", "b", "m"]
-  @@BACKGROUND_COLORS = ["on_light_red", "on_light_yellow",
-                          "on_light_green", "on_light_cyan",
-                          "on_light_blue", "on_light_magenta"]
-  
-  attr_reader :num_exact_matches, :win_state, :score
+  require_relative 'colors.rb'
+  include Colors
+
+  attr_reader :num_exact_matches, :num_color_only_matches, :win_state, :score
 
   def initialize
     @exact_matches = []
@@ -43,16 +41,6 @@ class Round
     end
     @num_color_only_matches = @color_only_matches.length
   end
-  
-  # display the color blocks 
-  def display_colors(colors)
-    puts "\n"
-    colors.each do |color|
-      color_index = @@COLOR_LIST.index(color)
-      print " ".send(@@BACKGROUND_COLORS[color_index]) + " "
-    end
-    print "  "
-  end
 
   # display the text describing the score for a round
   def display_matches
@@ -70,13 +58,6 @@ class Round
 
   # display the colors and text representing the score for a round
   def display_score(guesses, solution, game_version)
-    if game_version == "creator"
-      display_colors(solution)
-    end
-    puts "\n"
-    display_colors(guesses)
-    puts (" ".on_black + " ") * @num_exact_matches +
-        (" ".on_white + " ") * @num_color_only_matches + "\n\n"
     display_matches
   end
 
@@ -103,7 +84,6 @@ class Round
     find_color_only_matches(guesses, solution)
     display_score(guesses, solution, game_version)
     board_update = [guesses, [@num_exact_matches, @num_color_only_matches]]
-    board_update
   end
 
 end

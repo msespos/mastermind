@@ -25,8 +25,15 @@ class Game
       board_update = @round.play(@solution, "guesser")
     elsif game_version == "creator"
       puts "Computer is guessing:"
-      board_update @round.play(@solution, "creator", @num_rounds)
+      board_update = @round.play(@solution, "creator", @num_rounds)
     end
+    if game_version == "creator"
+      @board.display_colors(["r", "g", "r", "g"])
+    end
+    puts "\n"
+    @board.display_colors(["r", "r", "r", "r"])
+    puts (" ".on_black + " ") * @round.num_exact_matches +
+        (" ".on_white + " ") * @round.num_color_only_matches + "\n\n"
     @board.update_board_state(board_update)
     p @board.board_state  
     @num_rounds += 1
