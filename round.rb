@@ -5,7 +5,7 @@ class Round
                           "on_light_green", "on_light_cyan",
                           "on_light_blue", "on_light_magenta"]
   
-  attr_reader :num_exact_matches, :win_state
+  attr_reader :num_exact_matches, :win_state, :score
 
   def initialize
     @exact_matches = []
@@ -13,6 +13,12 @@ class Round
     @color_only_matches = []
     @num_color_only_matches = 0
     @win_state = false
+    @score = []
+  end
+
+  #determine score of round from exact and color-only matches
+  def score
+    @score = [@num_exact_matches, @num_color_only_matches]
   end
 
   # identify the number of exact matches and store it in @num_exact_matches
@@ -96,6 +102,8 @@ class Round
     find_exact_matches(guesses, solution)
     find_color_only_matches(guesses, solution)
     display_score(guesses, solution, game_version)
+    board_update = [guesses, [@num_exact_matches, @num_color_only_matches]]
+    board_update
   end
 
 end

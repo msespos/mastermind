@@ -2,6 +2,7 @@ class Game
 
   def initialize
     @round = Round.new
+    @board = Board.new
     @num_rounds = 0
     @user_game_selection = 0
     @solution = []
@@ -21,11 +22,13 @@ class Game
     @num_rounds == 11 ? (puts "Last round!") : (puts "#{12 - @num_rounds} rounds left!")
     puts "\n\nRound #{@num_rounds + 1}:\n\n"
     if game_version == "guesser"
-      @round.play(@solution, "guesser")
+      board_update = @round.play(@solution, "guesser")
     elsif game_version == "creator"
       puts "Computer is guessing:"
-      @round.play(@solution, "creator", @num_rounds)
+      board_update @round.play(@solution, "creator", @num_rounds)
     end
+    @board.update_board_state(board_update)
+    p @board.board_state  
     @num_rounds += 1
   end
 
