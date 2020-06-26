@@ -43,7 +43,7 @@ class Round
   end
 
   # update the computer's guesses each round based on previous results
-  def update_computer_guesses(computer_guesses, num_rounds, solution)
+  def update_computer_guesses(solution, num_rounds)
     if num_rounds == 0
       @computer_guesses = Code.new.create_random_code
     else
@@ -53,17 +53,22 @@ class Round
     end
   end
 
-  # play a round
-  def play(solution, game_version, num_rounds = 0)
-    p solution
+  # determine guesses for the round depending on game version
+  def create_guesses(solution, game_version, num_rounds = 0)
     if game_version == "guesser"
       guesses = Code.new.get_user_code("guess")
     elsif game_version == "creator"
-      guesses = update_computer_guesses(@computer_guesses, num_rounds, solution)
+      guesses = update_computer_guesses(solution, num_rounds)
     end
+  end
+
+  # play a round
+  def play(solution, game_version, num_rounds = 0)
+    p solution
+    guesses = create_guesses(solution, game_version, num_rounds)
     find_exact_matches(guesses, solution)
     find_color_only_matches(guesses, solution)
-    num_exact_matches == 4 ? @win_state = true : @win_state = false
+    @win_state = true if @num_exact_matches == 4
     board_update = [guesses, [@num_exact_matches, @num_color_only_matches]]
   end
 

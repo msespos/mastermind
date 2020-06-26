@@ -28,11 +28,12 @@ class Game
       board_update = @round.play(@solution, "creator", @num_rounds)
     end
     if game_version == "creator"
+      puts "\n"
       @board.display_colors(@solution)
+      puts "\n"
     end
     @board.update_board_state(board_update)
     @board.display_current_board(@board.board_state)
-    p @board.board_state  
     @num_rounds += 1
   end
 

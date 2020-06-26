@@ -13,7 +13,7 @@ class Board
     @board_state.push(board_update)
   end
 
-  # display the color blocks
+  # display the colors for a guess or solution
   def display_colors(colors)
     colors.each do |color|
       color_index = @@COLOR_LIST.index(color)
@@ -22,11 +22,14 @@ class Board
     print "  "
   end
 
+  # display the score (black and white "pegs")
   def display_score(score)
     puts (" ".on_black + " ") * score[0] + (" ".on_white + " ") * score[1]
   end
 
+  # display the board (all rows played so far)
   def display_current_board(board_state)
+    puts "\n"
     board_state.each do |row|
       display_colors(row[0])
       display_score(row[1])
