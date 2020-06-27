@@ -47,6 +47,7 @@ class Round
     if board.rounds_played == 0
       computer_guesses = Code.new.random_code
     else
+      # use clone to avoid overwriting last_guesses
       computer_guesses = board.last_guesses.clone
       computer_guesses.each_with_index do |guess, i|
         computer_guesses[i] = @@COLOR_LIST.sample if guess != solution[i]
