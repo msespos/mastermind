@@ -45,7 +45,7 @@ class Round
   # update the computer's guesses each round based on previous results
   def update_computer_guesses(solution, board)
     if board.rounds_played == 0
-      computer_guesses = Code.new.create_random_code
+      computer_guesses = Code.new.random_code
     else
       computer_guesses = board.last_guesses.clone
       computer_guesses.each_with_index do |guess, i|

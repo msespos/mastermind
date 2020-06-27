@@ -4,7 +4,7 @@ class Code
   include Colors
 
   # create a randomized code
-  def create_random_code
+  def random_code
     random_code = []
     0.upto(3) { random_code.push(@@COLOR_LIST.sample) }
     random_code

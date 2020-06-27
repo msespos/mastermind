@@ -10,7 +10,7 @@ class Game
   # create a solution based on the game version selected
   def create_solution(game_version)
     if game_version == "guesser"
-      @solution = Code.new.create_random_code
+      @solution = Code.new.random_code
     elsif game_version == "creator"
       @solution = Code.new.get_user_code("solution")
     end
