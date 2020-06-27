@@ -13,6 +13,14 @@ class Board
     @board_state.push(board_update)
   end
 
+  def rounds_played
+    @board_state.length
+  end
+
+  def last_guesses
+    @board_state[-1][0]
+  end
+
   # display the colors for a guess or solution
   def display_colors(colors)
     colors.each do |color|

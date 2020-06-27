@@ -1,7 +1,6 @@
 class Game
 
   def initialize
-    @round = Round.new
     @board = Board.new
     @num_rounds = 0
     @user_game_selection = 0
@@ -19,13 +18,14 @@ class Game
 
   # play a round of the chosen version of the game
   def play_round(game_version)
+    round = Round.new
     @num_rounds == 11 ? (puts "Last round!") : (puts "#{12 - @num_rounds} rounds left!")
     puts "\n\nRound #{@num_rounds + 1}:\n\n"
     if game_version == "guesser"
-      board_update = @round.play(@solution, "guesser")
+      board_update = round.play(@solution, "guesser", @board)
     elsif game_version == "creator"
       puts "Computer is guessing:"
-      board_update = @round.play(@solution, "creator", @num_rounds)
+      board_update = round.play(@solution, "creator", @board)
     end
     if game_version == "creator"
       puts "\n"
@@ -35,21 +35,22 @@ class Game
     @board.update_board_state(board_update)
     @board.display_current_board(@board.board_state)
     @num_rounds += 1
+    round
   end
 
   # report the state of the game to the user
-  def report_state(game_version)
+  def report_state(game_version, round)
     if game_version == "guesser"
       if @num_rounds == 12
-        @round.win_state ? (puts "You win!") : (puts "12 rounds are up. You lose!")
+        round.win_state ? (puts "You win!") : (puts "12 rounds are up. You lose!")
       else
-        @round.win_state ? (puts "You win!") : (puts "Try again!")
+        round.win_state ? (puts "You win!") : (puts "Try again!")
       end
     elsif game_version == "creator"
       if @num_rounds == 12
-        @round.win_state ? (puts "Computer wins!") : (puts "12 rounds are up. Computer loses!")
+        round.win_state ? (puts "Computer wins!") : (puts "12 rounds are up. Computer loses!")
       else
-        if @round.win_state
+        if round.win_state
           puts "Computer wins!"
         else
           puts "Press return to play another round"
@@ -62,9 +63,11 @@ class Game
   # play a full 12-round game
   def play(game_version)
     create_solution(game_version)
-    while @round.num_exact_matches != 4 && @num_rounds < 12
-      play_round(game_version)
-      report_state(game_version)
+    game_finished = false
+    while !game_finished
+      round = play_round(game_version)
+      report_state(game_version, round)
+      game_finished = true if round.num_exact_matches == 4 || @num_rounds == 12
       puts "\n\n"
     end
   end

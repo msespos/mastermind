@@ -43,29 +43,30 @@ class Round
   end
 
   # update the computer's guesses each round based on previous results
-  def update_computer_guesses(solution, num_rounds)
-    if num_rounds == 0
-      @computer_guesses = Code.new.create_random_code
+  def update_computer_guesses(solution, board)
+    if board.rounds_played == 0
+      computer_guesses = Code.new.create_random_code
     else
-      @computer_guesses.each_with_index do |guess, i|
-        @computer_guesses[i] = @@COLOR_LIST.sample if guess != solution[i]
+      computer_guesses = board.last_guesses.clone
+      computer_guesses.each_with_index do |guess, i|
+        computer_guesses[i] = @@COLOR_LIST.sample if guess != solution[i]
       end
     end
   end
 
   # determine guesses for the round depending on game version
-  def create_guesses(solution, game_version, num_rounds = 0)
+  def create_guesses(solution, game_version, board)
     if game_version == "guesser"
       guesses = Code.new.get_user_code("guess")
     elsif game_version == "creator"
-      guesses = update_computer_guesses(solution, num_rounds)
+      guesses = update_computer_guesses(solution, board)
     end
   end
 
   # play a round
-  def play(solution, game_version, num_rounds = 0)
+  def play(solution, game_version, board)
     p solution
-    guesses = create_guesses(solution, game_version, num_rounds)
+    guesses = create_guesses(solution, game_version, board)
     find_exact_matches(guesses, solution)
     find_color_only_matches(guesses, solution)
     @win_state = true if @num_exact_matches == 4
