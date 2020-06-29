@@ -21,6 +21,10 @@ class Board
     @board_state[-1][0]
   end
 
+  def last_score
+    @board_state[-1][1]
+  end
+
   # display the colors for a guess or solution
   def display_colors(colors)
     colors.each do |color|

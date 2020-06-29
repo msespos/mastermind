@@ -5,6 +5,7 @@ class Game
     @num_rounds = 0
     @user_game_selection = 0
     @solution = []
+    @candidates = Candidates.new
   end
 
   # create a solution based on the game version selected
@@ -25,7 +26,7 @@ class Game
       board_update = round.play(@solution, "guesser", @board)
     elsif game_version == "creator"
       puts "Computer is guessing:"
-      board_update = round.play(@solution, "creator", @board)
+      board_update = round.play(@solution, "creator", @board, @candidates)
     end
     if game_version == "creator"
       puts "\n"

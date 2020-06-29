@@ -17,4 +17,8 @@ class Candidates
     end
   end
 
+  def filter_candidates(non_matches)
+    @candidates = @candidates - non_matches
+  end
+
 end
