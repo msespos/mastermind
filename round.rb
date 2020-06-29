@@ -56,7 +56,7 @@ class Round
         end
       end
       candidates.remove_non_matches(non_matches)
-      p candidates.candidate_list
+      puts "Remaining number of candidates: " + candidates.candidate_list.length.to_s
       computer_guesses = candidates.candidate_list.sample
     end
   end
