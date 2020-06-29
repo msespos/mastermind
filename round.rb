@@ -64,6 +64,7 @@ class Round
   # determine guesses for the round depending on game version
   def create_guesses(solution, game_version, board, candidates = nil)
     if game_version == "guesser"
+      p solution
       guesses = Code.new.get_user_code("guess")
     elsif game_version == "creator"
       guesses = update_computer_guesses(solution, board, candidates)
@@ -72,7 +73,6 @@ class Round
 
   # play a round
   def play(solution, game_version, board, candidates = nil)
-    p solution
     guesses = create_guesses(solution, game_version, board, candidates)
     find_exact_matches(guesses, solution)
     find_color_only_matches(guesses, solution)
