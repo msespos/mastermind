@@ -45,19 +45,19 @@ class Round
   # update the computer's guesses each round based on previous results
   def update_computer_guesses(solution, board, candidates)
     if board.rounds_played == 0
-      @computer_guesses = ["r", "r", "y", "y"]
+      computer_guesses = ["r", "r", "y", "y"]
     else
+      computer_guesses = board.last_guesses.clone
       non_matches = []
-      candidates.candidates.each do |candidate|
-        if [find_exact_matches(candidate, solution), find_color_only_matches(candidate, solution)] !=
-            board.last_score
+      candidates.candidate_list.each do |candidate|
+        if [find_exact_matches(candidate, computer_guesses), 
+            find_color_only_matches(candidate, computer_guesses)] != board.last_score
           non_matches.push(candidate)
         end
       end
-      candidates.filter_candidates(non_matches)
-      p candidates.candidates
-      computer_guesses = candidates.candidates.sample
-      p computer_guesses
+      candidates.remove_non_matches(non_matches)
+      p candidates.candidate_list
+      computer_guesses = candidates.candidate_list.sample
     end
   end
 
