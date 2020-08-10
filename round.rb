@@ -64,7 +64,6 @@ class Round
   # determine guesses for the round depending on game version
   def create_guesses(solution, game_version, board, candidates = nil)
     if game_version == "guesser"
-      p solution
       guesses = Code.new.get_user_code("guess")
     elsif game_version == "creator"
       guesses = update_computer_guesses(solution, board, candidates)
