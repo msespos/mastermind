@@ -26,7 +26,8 @@ If the user is the creator, they get to choose the code. The computer then guess
 The feedback used to aid the guesser (user or computer) is a set of up to four "pegs" which are shown to the guesser after each guess. For each color that was correctly guessed and in the correct position, a black peg (red on the repl.it page) is revealed. For each color that was correctly guessed but is not in the correct position, a white peg is revealed. For example:
 
 if rbyg is the secret code:
-- a guess of rmmg would result in feedback of 1 black and 1 white peg
+- a guess of rmgm would result in feedback of 1 black and 1 white peg
+- a guess of rmmg would result in feedback of 2 black and no white pegs
 - a guess of rbgy would result in feedback of 2 black and 2 white pegs
 
 If the feedback is four black pegs, then the game is over and the guesser has won (assuming they have not gone over the 12 guess limit).
