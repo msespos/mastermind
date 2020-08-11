@@ -46,7 +46,8 @@ class Game
         if round.win_state
           puts "You win!"
         else
-          puts "12 rounds are up. You lose!\nThe secret code was #{@solution.join()}!"
+          puts "12 rounds are up. You lose!\nThe secret code was:\n\n"
+          @board.display_colors(@solution)
         end
       else
         round.win_state ? (puts "You win!") : (puts "Try again!")
