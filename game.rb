@@ -43,7 +43,11 @@ class Game
   def report_state(game_version, round)
     if game_version == "guesser"
       if @num_rounds == 12
-        round.win_state ? (puts "You win!") : (puts "12 rounds are up. You lose!")
+        if round.win_state
+          puts "You win!"
+        else
+          puts "12 rounds are up. You lose!\nThe secret code was #{@solution.join()}!"
+        end
       else
         round.win_state ? (puts "You win!") : (puts "Try again!")
       end
