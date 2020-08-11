@@ -23,14 +23,20 @@ There are two players in Mastermind. In this implementation, the two players are
 
 If the user is the creator, they get to choose the code. The computer then guesses the code, using the Swaszek algorithm, a simplified version of the Knuth algorithm (see below). With Swaszek the computer will guess the code with an expected number of 4.638 guesses.
 
-The feedback used to aid the guesser (user or computer) is a set of up to four "pegs" which are shown to the guesser after each guess. For each color that was correctly guessed and in the correct position, a black peg (red on the repl.it page) is revealed. For each color that was correctly guessed but is not in the correct position, a white peg is revealed. For example:
+The feedback used to aid the guesser (user or computer) is a set of up to four "pegs" which are shown to the guesser after each guess. For each color that was correctly guessed and in the correct position, a black peg (red on the repl.it page) is revealed. For each color that was correctly guessed but is not in the correct position, a gray peg (white on the repl.it page) is revealed. See the examples below.
 
-if rbyg is the secret code:
-- a guess of rmgm would result in feedback of 1 black and 1 white peg
-- a guess of rmmg would result in feedback of 2 black and no white pegs
-- a guess of rbgy would result in feedback of 2 black and 2 white pegs
+If rbyg is the secret code:
+- a guess of rmgm would result in feedback of 1 black/red and 1 gray/white peg
+- a guess of rmmg would result in feedback of 2 black/red and no gray/white pegs
+- a guess of rbgy would result in feedback of 2 black/red and 2 gray/white pegs
 
 If the feedback is four black pegs, then the game is over and the guesser has won (assuming they have not gone over the 12 guess limit).
+
+Screenshot of a player winning Mastermind:
+![MM Player win screenshot](/images/MM_player_win.png)
+
+Screenshot of a computer winning Mastermind:
+![MM Computer win screenshot](/images/MM_computer_win.png)
 
 The algorithm used for the computer guessing is a simplified version, implemented by Swaszek, of the famous Knuth algorithm. In the Swaszek algorithm, the computer begins by creating the set of all possible guesses. The first guess of rryy is then made. Then once the computer receives the feedback, it eliminates from the original set all guesses that could not satisfy the combination of that guess and the given feedback. The computer then makes its next guess by choosing randomly from the set of remaining guesses. (In the Knuth algorithm a more sophisticated process is used than random selection at this point.) The process is then repeated until the set has been narrowed down to one guess, or the computer guesses correctly from the set.
 
